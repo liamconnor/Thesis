@@ -1,0 +1,9 @@
+#!/bin/csh
+
+pdflatex liamthesisshell.tex
+cat thesisNotes.bib | grep -v REVTEX > thesisNotes.bib
+bibtex thesis; pdflatex thesis; pdflatex thesis
+rm *.aux *.dvi *.log *.blg *.out
+rm sections/*.aux
+open thesis.pdf
+

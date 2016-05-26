@@ -1,0 +1,144 @@
+\documentclass[11pt]{ut-thesis}
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% USEPACKAGE DECLARATIONS
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+%\includeonly{./sections/reionization}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{aas_macros}
+\usepackage{natbib}
+\usepackage{html}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage[figuresleft]{rotating}
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% AUTHOR INFORMATION
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+\degree{Doctor of Philosophy}
+\department{Astronomy and Astrophysics}
+\gradyear{2016}
+\author{Liam Dean Connor}
+\title{Long wavelength astrophysics}
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% COMMANDS AND DEFINITIONS
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+% Put here all other formatting commands that belong in the preamble. In particular, you should put all of 
+% your \newcommand's, \newenvironment's, \newtheorem's, etc. (in other words, all the global definitions 
+% that you will need throughout your thesis) in a separate file and use "\input{filename}" to input it here.
+\input{commands}
+
+% Table of contentds depth (0 = chapter, 1 = section, 2 = subsection, 3 = subsubsection, etc.)
+\setcounter{tocdepth}{2}
+
+% Make each page fill up the entire page.
+\flushbottom
+
+% ==============================================================================
+% PRELIMINARY CONTENT
+% ==============================================================================
+
+\begin{document}
+
+% This sets the page style and numbering for preliminary sections.
+\begin{preliminary}
+
+% This generates the title page from the information given above.
+\maketitle
+
+% There should be NOTHING between the title page and abstract.  However, if your document 
+% is two-sided and you want the abstract _not_ to appear on the back of the title page, then uncomment 
+% the following line.
+% \cleardoublepage
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% ABSTRACT
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+\begin{abstract} % At most 350 words for Ph.D.
+
+\end{abstract}
+
+% Anything placed between the abstract and table of contents will appear on a separate page since the 
+% abstract ends with \newpage and the table of contents starts with \clearpage.  Use \cleardoublepage
+% for anything that you want to appear on a right-hand page.
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% DEDICATION
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+%\begin{dedication}
+\vspace*{\fill}
+\begin{center}
+{\em To my parents and Pop}
+\end{center}
+\vfill
+%\end{dedication}
+
+\newpage % Force separate pages for dedication and acknowledgements
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% ACKNOWLEDGEMENTS
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+\begin{acknowledgements}
+
+
+\end{acknowledgements}
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% TABLE OF CONTENTS
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+\tableofcontents
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% LIST OF TABLES
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+\listoftables
+
+% ----------------------------------------------------------------------------------------------------------------------------------------
+% LIST OF FIGURES
+% ----------------------------------------------------------------------------------------------------------------------------------------
+
+\listoffigures
+
+\end{preliminary}
+
+% ==============================================================================
+% CHAPTERS
+% ==============================================================================
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Put your Chapters here; the easiest way to do this is to keep     %%
+%%  each chapter in a separate file and `\include' all the files.     %%
+%%  Each chapter file should start with "\chapter{ChapterName}".      %%
+%%  Note that using `\include' instead of `\input' will make each     %%
+%%  chapter start on a new page, and allow you to format only parts   %%
+%%  of your thesis at a time by using `\includeonly'.                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\include{./sections/introduction}
+\include{./sections/beamforming}
+%\include{./sections/substructure}
+%\include{./sections/neutrinos}
+%\include{./sections/tiannu}
+%\include{./sections/conclusions}
+
+% ==============================================================================
+% BIBLIOGRAPHY
+% ==============================================================================
+
+\addcontentsline{toc}{chapter}{Bibliography} % Adds a line for the Bibliography in the Table of Contents.
+
+\bibliographystyle{apj}
+\bibliography{references}
+
+\end{document}
