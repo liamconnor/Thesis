@@ -1,6 +1,6 @@
 \chapter{Beamforming}
 \label{chapter:beamforming}
-\chaptermark{Relative velocity reconstruction}
+\chaptermark{Beamforming}
 
 
 
@@ -11,8 +11,8 @@
 \section{Chapter Overview}
 
 In an era when electric fields can be sampled billions of 
-times per second, radio telescopes are becoming almost entirely digital. 
-Though the cost of constructing large single-dish telescopes is not expected to
+times per second, radio telescopes are becoming more and more digital. 
+While the cost of constructing large single-dish telescopes is not expected to
 decrease substantially, the cost of building large computing clusters is, 
 which makes it economically and strategically sensible to 
 point one's telescope in software, as with digital beamforming.
@@ -29,7 +29,7 @@ of several different software packages, the implementation of an early scheduler
 and an automated point-source calibration daemon that removes drifting instrumental 
 gains in real-time. We will also detail early pulsar 
 work and the creation of an ongoing VLBI FRB search between 
-the DRAO and ARO.
+the DRAO and ARO. The latter will include constraints on $\alpha$.
 
 % ================================================================================
 % INTRODUCTION
@@ -85,9 +85,32 @@ CHIME Pathfinder's transient search. We can write this explicitly as follows.
      a_2(\nu) e^{i \phi_2(\nu)}, ... \,, \,a_N(\nu) e^{i \phi_N(\nu)} \right )\\
      \mathbf{x}_{\rm t \nu} &= \left ( x_1(\rm{t}, \nu), \, x_2(\rm{t}, \nu), 
      ..., \, x_N(\rm{t}, \nu) \right )
-% \mathbf{x}_{\rm t \nu} = \left ( x_1(\rm{t} \nu), \, 
-% x_2(\rm{t} \nu)\, , ... \,, \,x_N(\rm{t} \nu) \right )
 \end{align}
+
+The voltage stream is then effectively squared and integrated 
+to give a visibility stream. 
+In the case of CHIME, $X_{\rm BF}$ corresponds to a single polarization 
+so to get the full Stokes information one must compute the 
+north-south polarization's autocorrelation, the east-west autocorrelation, 
+and their cross-correlation. The Stokes vector can be written as,
+
+% Make sure Stokes stuff is already defined.
+\begin{equation}
+\begin{pmatrix}
+I \\ 
+Q \\ 
+U\\ 
+V
+\end{pmatrix}
+= \begin{pmatrix}
+\, X_{\rm ew} X_{\rm ew}^* + X_{\rm ns} X_{\rm ns}^*\, \\ 
+\, X_{\rm ew} X_{\rm ew}^* - X_{\rm ns} X_{\rm ns}^* \,\\ 
+\, \Re e(X_{\rm ew} X_{\rm ns}^*)\,\\ 
+\, \Im m(X_{\rm ew} X_{\rm ns}^*)\,
+\end{pmatrix}.
+\end{equation}
+
+
 
 \subsection{Geometric phase}
 
@@ -104,7 +127,7 @@ onto the pointing vector, $\hat{\mathbf{k}}$. This gives,
 \noindent where we have taken $\mathbf{d}_n$ to be the baseline vector between 
 feed $n$ and an arbitrary reference point, and $\phi_n$ is the corresponding 
 phase difference. A sketch for this is shown in Fig.~\ref{fig-bf_diagram} on page 
-\pageref{eqn2}.
+\pageref{fig-bf_diagram}.
 
 
 %trim={<left> <lower> <right> <upper>}
@@ -114,7 +137,7 @@ phase difference. A sketch for this is shown in Fig.~\ref{fig-bf_diagram} on pag
 \includegraphics[trim={1.in, 1.in, 2.5in, 1.in}, width=1\textwidth]{./figures/beamforming/beamforming_diagram.jpeg} 
 \vspace{0.0cm}
 \caption[abc]{Diagrammatic example of a three-element beamformer. The 
-wavefront from a far-field point source arrives at each antenna 
+wavefront from a far-field point-source arrives at each antenna 
 at different times, but the delay is calculable given an array 
 configuration and a direction to the object. Complex weights can 
 be applied to each antenna's voltage time-stream to account 
@@ -137,11 +160,11 @@ HA = LST - RA.
 
 We use the standard interferometric $(u, v, w)$ coordinate system 
 to describe our baseline vector, $\mathbf{d}_n$. This is a 
-right-handed coordinate system where $u$ and $v$ are in the plane 
+right-handed coordinate system where $u$ (east-west) and $v$ (north-south) are in the plane 
 whose normal is the zenith, and $w$ measures the vertical direction \citep{1986isra.book.....T}.
 They are defined in numbers of wavelengths, with
 $u = d_{\rm ew} / \lambda$, $v = d_{\rm ns} / \lambda$, 
-and $w = d_{\rm vert} / \lambda$. Eqn~\ref{eqn-phi_n} can we expanded 
+and $w = d_{\rm vert} / \lambda$. Eq.~\ref{eqn-phi_n} can we expanded 
 as,
 
 \begin{align}   
@@ -158,6 +181,7 @@ using spherical trigonometry. Though we do not go through the
 derivation here, it is given by the following product,
 
 \begin{equation}
+\label{eq-fringestop_phase}
 \mathbf{d}_n \cdot  {\mathbf{\hat{k}}} = \lambda \begin{pmatrix}
 u, & v, & w
 \end{pmatrix}  \cdot \begin{pmatrix} 
@@ -167,15 +191,10 @@ u, & v, & w
 \end{pmatrix} .
 \end{equation}
 
-These phases are not only essential to the beamforming
+These phases are not only essential to beamforming but 
+also for the fringestopping process, which is ubiquitous in 
+interferometric analysis and is descibed in Sec.~\ref{sec-instr_phases}.
 
-
-
-\begin{align}
-\rm{sin}(alt) = \rm{sin}(\delta)\, \rm{sin}(lat) + cos(\delta)\, cos(lat)\, cos(\rm HA)\\
-\rm{cos}(az) = \frac{\rm{sin}\delta - \rm{sin}(alt) \,
-\rm{sin}(lat)}{\rm{cos}(alt)\, \rm{cos}(lat)}
-\end{align}
 
 \begin{table}[]
 \centering
@@ -196,6 +215,7 @@ $lon$                                   & Telescope longitude
 \section{Pathfinder beamformer}
 
 \subsection{Instrumental phases}
+\label{sec-instr_phases}
 In a real experiment, if the voltages from each antenna, $x_n$, are summed 
 without any adjustment as written in Eq~\ref{eq-bf_sum}, one should only 
 expect noise and not a coherent beam. This is because we have assumed 
@@ -226,12 +246,130 @@ as,
 
 \noindent where $\phi_{\rm beam}$ is the beam's phase for a given pointing, 
 $\phi_{\rm an}$ comes from the analogue chain (dual-pol feed, coax, etc.),  
+$\phi_{\rm e}$ is any phase introduced in the electronics, 
 and $\phi_{\rm fpga}$ are phases applied in the $F$-engine. 
 
-Since the instrumental phases are largely random, the simplest 
-way to remove them is to measure them from a source on the sky. 
+Since the instrumental phases are effectively random, the simplest 
+way to remove them is to solve for them empirically, usually from 
+a point-source on the sky. Using the visibility definition in 
+Eq~\ref{eqn-visibility}, one can evaluate that all-sky integral 
+assuming the sky's electric field is produced by a single point-source. 
+This is tantamount to a delta function at a single direction on the sky.
+
+\begin{align}
+V^{\rm ps}_{m,n} &= \int d^2\mathbf{\hat{k}} \, g_m(\mathbf{\hat{k}}) \, g^*_n(\mathbf{\hat{k}})\, e_m(\mathbf{\hat{k}}) e_n^*(\mathbf{\hat{k}})\, \delta(\mathbf{\hat{k}} - \mathbf{\hat{k}}_{\rm ps})\\
+ &= {g}_m(\mathbf{\hat{k}}_{\rm ps}) \, g^*_n(\mathbf{\hat{k}}_{\rm ps})\,e_m(\mathbf{\hat{k}}_{\rm ps}) e_n^*(\mathbf{\hat{k}}_{\rm ps})
+\end{align}
+
+\noindent In this equation $\mathbf{\hat{k}}_{\rm ps}$ is the only direction 
+on the sky with a source --- an approximation whose validity we 
+will discuss below --- and $\delta$ is a Kronecker delta function. 
+
+\begin{equation}
+V_{m, n}^{\rm ps} = 
+\end{equation}
+
+% This may need to go earlier on in the thesis, perhaps in the intro
+% or the CHIME chapter if it exists
+\begin{equation}
+\label{eqn-visibility}
+     V_{m,n} = \int d^2\mathbf{\hat{k}} \,
+     g_m(\mathbf{\hat{k}}) \, g^*_n(\mathbf{\hat{k}})\, e_m(\mathbf{\hat{k}}) e_n^*(\mathbf{\hat{k}})
+\end{equation}
+
+\noindent If we explicitly write the phase information of the sky's 
+electric field, we can use 
+
+\begin{equation}
+\label{eqn-tsky}
+e_m(\mathbf{\hat{k}}) e_n^*(\mathbf{\hat{k}}) = T(\mathbf{\hat{k}}) 
+e^{2\pi \,i \,\mathbf{\hat{k}} \cdot \mathbf{d}_{mn}}.
+\end{equation}
+
+\begin{equation}
+\label{eqn-visibility-temp}
+     V_{m,n} = \int d^2\mathbf{\hat{k}} \,
+     g_m(\mathbf{\hat{k}}) \, g^*_n(\mathbf{\hat{k}})\, T(\mathbf{\hat{k}}) 
+e^{2\pi \,i \,\mathbf{\hat{k}} \cdot \mathbf{d}_{mn}}
+\end{equation}
+
+
+Therefore a single correlation can be written as an intensity multiplied 
+by a phase factor that is determined by the source-position's 
+projection onto that correlation's baseline. Since that phase 
+factor is calculable via Eq.~\ref{eq-fringestop_phase}, it 
+can be removed in a process called ``fringestopping". The 
+data can be inspected visually quite easily, since 
+a transiting point-source will fringe as a function of 
+time at a rate corresponding 
+to the projected baseline length, but should not after fringestopping 
+is applied. This is demonstrated with an inter-cylinder Cygnus A transit in 
+Fig.~\ref{fig-fringestop}. 
+
+% -------------------------------------------- FIGURE 1 --------------------------------------------
+
+\begin{figure}[!t]
+\label{fig-fringestop}
+\begin{center}
+\includegraphics[trim={1in 0in 1in 1in}, width=\smwidth]{./figures/beamforming/thesis_fringestop.png}
+\caption[abc]{An example of the fringestopping process that is 
+ necessary for gain calibration off of a transiting point-source. Since 
+ the phase of a visibility will have a time- and frequency-dependent 
+ component, the measured correlation will fringe as the earth rotates in 
+ a chromatic way. This effect can be removed by multiplying each visibility by 
+ $e^{-i \phi_{\rm mn}(\rm t, \nu)}$, as determined by Eq.~\ref{eq-fringestop_phase}. 
+ The top left panel shows the raw correlation as a function of transiting
+ $RA$ between feeds 1 and 129, which are of the same polarization but 
+ on opposite cylinders, separated by 21 m. We plot  
+ three different frequencies. The panel below it 
+ shows the same complex visibility's phase. The slope, or fringe-rate, decreases 
+ at lower frequencies, as expected. The right panel show the same data 
+ after running it through the fringestopping pipeline. Though the resulting 
+ phases are near flat, implying that the baseline is no long fringeing, 
+ the visibilities are not purely real; this is because there are residual 
+ instrumental phases. These phases can be solved for using an 
+ eigendecomposition now that the array is phased up to a single point-source.}  
+\end{center}
+\end{figure}
+
+% -------------------------------------------- FIGURE 1 --------------------------------------------
+
+
+The $N(N+1)/2$ visibilities we measure can be thought of as 
+the upper triangle of an $N\times N$ complex Hermitian 
+matrix, $\mathbf{V}$. This is simply the outer product of the 
+signal vector, $\mathbf{x}$, with its Hermitian conjugate. 
+
+\begin{align}
+\label{eqn-corrmat}
+\mathbf{V} = \mathbf{x} \mathbf{x}^\dagger &\approx \begin{pmatrix}
+|g_0|^2\, e_0^2 &  & ... & & & \\ 
+ &  &  & &  g_n g_m^* e_n e_m^*& \\ 
+ &  &  \ddots & & & \\ 
+ &  &  &  & & \\
+&&&&&&\\
+ &  &   &  & &  |g_N|^2 \, e_N^2
+\end{pmatrix}
+\end{align}
+
+If the sky is composed of a single point-source
+then this matrix will be rank one, i.e. there is only one 
+non-zero eigenvalue. One can see this by referring to Eq.~\ref{eqn-tsky} 
+and noting that if the data has been fringestopped, then the 
+sky temperature can be factored out of
+Eq.~\ref{eqn-corrmat}, which becomes
+
+\begin{equation}
+\mathbf{V} = T(\mathbf{\hat{k}}) \, \mathbf{g} \mathbf{g}^\dagger.
+\end{equation}
+
+Diagonalizing the correlation matrix $\mathbf{V}$ will give 
+us a complex eignvector corresponding to the largest 
+eigenvalue, that is proportional to the gain vector $\mathbf{g}$.
+
 
 \section{FRB VLBI search}
+
 
 \begin{figure}[H]
 \label{fig-bf_diagram}
