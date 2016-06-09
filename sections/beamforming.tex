@@ -131,7 +131,7 @@ phase difference. A sketch for this is shown in Fig.~\ref{fig-bf_diagram} on pag
 
 
 %trim={<left> <lower> <right> <upper>}
-\begin{figure}[H]
+\begin{figure}[!h]
 \label{fig-bf_diagram}
 \begin{center}
 \includegraphics[trim={1.in, 1.in, 2.5in, 1.in}, width=1\textwidth]{./figures/beamforming/beamforming_diagram.jpeg} 
@@ -308,9 +308,10 @@ Fig.~\ref{fig-fringestop}.
 
 % -------------------------------------------- FIGURE 1 --------------------------------------------
 
-\begin{figure}[!t]
+\begin{figure}[!h]
 \label{fig-fringestop}
 \begin{center}
+\vspace{1cm}
 \includegraphics[trim={1in 0in 1in 1in}, width=\smwidth]{./figures/beamforming/thesis_fringestop.png}
 \caption[abc]{An example of the fringestopping process that is 
  necessary for gain calibration off of a transiting point-source. Since 
@@ -363,21 +364,55 @@ Eq.~\ref{eqn-corrmat}, which becomes
 \mathbf{V} = T(\mathbf{\hat{k}}) \, \mathbf{g} \mathbf{g}^\dagger.
 \end{equation}
 
-Diagonalizing the correlation matrix $\mathbf{V}$ will give 
-us a complex eignvector corresponding to the largest 
-eigenvalue, that is proportional to the gain vector $\mathbf{g}$.
+\noindent Therefore by diagonalizing the correlation matrix $\mathbf{V}$ 
+we get a complex eigenvector corresponding to the largest 
+eigenvalue, that is proportional to the gain vector $\mathbf{g}$. 
+The phase of this eigenvector will be an estimate for the instrumental 
+phases, $\phi_{g_n}$, up to some unknown global offset. The goodness 
+of this calibration depends on the validity of our assumption 
+that the correlation matrix is rank one. We can estimate the 
+error on the calibration solution as the ratio of the second largest 
+eigenvalue, $\lambda_2$, to the largest, $\lambda_1$. For typical 
+frequencies we get values of $\frac{\lambda_2}{\lambda_1}\sim3\%$.
 
+
+These algorithms have been implemented in a pre-beamforming 
+pipeline written in {\tt Python}. Each day a point-source transit 
+is fringestopped and a calibration solution is solved for. 
+The source chosen depends on the solar time of its transit: Since the
+sun is extraordinarily bright in our band, the transit has to be 
+at night for good calibration solutions. Historically, 
+we have used Cygnus A in the spring and summer, Cassiopeia A 
+in the summer and fall, and Tau A in the winter. 
+Whatever we calibrate off of, the phases of that solution are 
+written to pickle files that are readable by the Pathfinder's FPGAs.
+The FPGA then applies complex gains after channelization, which 
+in theory should provide the beamforming kernel with voltages 
+whose phases are purely geometric. 
 
 \section{FRB VLBI search}
 
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \label{fig-bf_diagram}
 \begin{center}
-\includegraphics[trim={1.in, 1.in, 2.5in, 1.in}, width=1\textwidth]{./figures/beamforming/moose_diagram.png} 
-\vspace{0.0cm}
-\caption[abc]{}  
-\vspace{-0.4cm}   
+\includegraphics[trim={1.in, 0in, 2.5in, 0in}, width=1\textwidth]{./figures/beamforming/moose_diagram.png} 
+%\vspace{0.0cm}
+\caption[abc]{Block diagram of the beamforming backend on CHIME Pathfinder. 
+A calibration solution is obtained from a bright point-source transit, 
+the phases of which are fed into the FPGAs where they are applied as a 
+digital gain. All antenna signals are then sent the $X$-engine, 
+comprised of 16 GPU nodes. Each node applies geometric phases then 
+sums the voltage stream across all antennas with the same polarization. 
+The two resultant beams are then sent to our acquisition machine {\tt moose} 
+as {\tt VDIF} packets, where a multi-threaded capture code, {\tt ch\_vdif\_assembler}. 
+At this point the baseband data are either written to disk as scrambled baseband 
+{\tt VDIF}, or they are reorganized in time and frequency. The ordered data are 
+searched for FRBs after squaring and integrating to $\sim$millisecond cadence 
+using a tree-dedispersion algorithm. If there is a trigger, then the corresponding 
+baseband data is hard-linked. Old files that haven't been hard-linked are deleted
+periodically.}
+\vspace{0.4cm}   
 \end{center}
 \end{figure}
 
