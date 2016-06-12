@@ -236,7 +236,7 @@ altered by an effective gain, $g_n$, and a noise term, $n_n$.
 
 \noindent We have lumped several terms into $g_n = |g_n| e^{i \phi_{g_n}}$, 
 which is composed of a pointing-dependent beam term
-and any complex gain introduced after light hits the cylinder. 
+and any complex gain introduced once light hits the cylinder. 
 Since we really only care about the phase, we can decompose $\arg(g_n)$
 as,
 
@@ -295,7 +295,7 @@ e^{2\pi \,i \,\mathbf{\hat{k}} \cdot \mathbf{d}_{mn}}
 
 
 Therefore a single correlation can be written as an intensity multiplied 
-by a phase factor that is determined by the source-position's 
+by a phase factor that is determined by the source direction's
 projection onto that correlation's baseline. Since that phase 
 factor is calculable via Eq.~\ref{eq-fringestop_phase}, it 
 can be removed in a process called ``fringestopping". The 
@@ -322,7 +322,7 @@ Fig.~\ref{fig-fringestop}.
  The top left panel shows the raw correlation as a function of transiting
  $RA$ between feeds 1 and 129, which are of the same polarization but 
  on opposite cylinders, separated by 21 m. We plot  
- three different frequencies. The panel below it 
+ three different frequencies. The panel below the top left
  shows the same complex visibility's phase. The slope, or fringe-rate, decreases 
  at lower frequencies, as expected. The right panel show the same data 
  after running it through the fringestopping pipeline. Though the resulting 
@@ -352,6 +352,7 @@ signal vector, $\mathbf{x}$, with its Hermitian conjugate.
  &  &   &  & &  |g_N|^2 \, e_N^2
 \end{pmatrix}
 \end{align}
+\\
 
 If the sky is composed of a single point-source
 then this matrix will be rank one, i.e. there is only one 
@@ -366,7 +367,7 @@ Eq.~\ref{eqn-corrmat}, which becomes
 
 \noindent Therefore by diagonalizing the correlation matrix $\mathbf{V}$ 
 we get a complex eigenvector corresponding to the largest 
-eigenvalue, that is proportional to the gain vector $\mathbf{g}$. 
+eigenvalue, and that eigenvector is proportional to the gain vector $\mathbf{g}$. 
 The phase of this eigenvector will be an estimate for the instrumental 
 phases, $\phi_{g_n}$, up to some unknown global offset. The goodness 
 of this calibration depends on the validity of our assumption 
@@ -380,7 +381,8 @@ These algorithms have been implemented in a pre-beamforming
 pipeline written in {\tt Python}. Each day a point-source transit 
 is fringestopped and a calibration solution is solved for. 
 The source chosen depends on the solar time of its transit: Since the
-sun is extraordinarily bright in our band, the transit has to be 
+sun is extraordinarily bright in our band it will always appear in the sidelobes,
+, so the transit has to be 
 at night for good calibration solutions. Historically, 
 we have used Cygnus A in the spring and summer, Cassiopeia A 
 in the summer and fall, and Tau A in the winter. 
@@ -391,6 +393,60 @@ in theory should provide the beamforming kernel with voltages
 whose phases are purely geometric. 
 
 \section{FRB VLBI search}
+
+\subsection{Motivation}
+
+The CHIME Pathfinder is meant to have only one synthetic beam. 
+Its purpose is primarily to act as a test-bed for the more powerful 
+pulsar and FRB backends that will be attached to the 
+full four-cylinder CHIME. However since the Pathfinder is on 
+sky at all times and the beamformer we have built does not 
+interrupt the ongoing cosmology acquisition, we decided to 
+build a preliminary FRB search. We also have as many as three 
+other telescopes onto which we can mount 
+CHIME feeds and observe in our band: the Algonquin Radio Observatory (ARO), 
+the John A. Galt 26m, and the GreenBank 140ft telescope. This would
+allow for the first ever VLBI detection of an FRB. 
+
+This is interesting for a few reasons. From a development 
+standpoint it allows us to understand better various stages of the 
+CHIME-FRB pipeline, including the rate of 
+RFI false-positives, our algorithm's search 
+efficiency, and specs on the regularity and precision of instrumental 
+gain removal. It will also give us a good sense of how the real CHIME 
+beams behave on the sky. Perhaps most interestingly, 
+we could reasonably expect to see a burst after several months of 
+observing, hopefully in coincidence with the telescopes previously mentioned. 
+We could therefore not only detect an FRB with sub-arcsecond resolution,
+but also would the first source in our band, at 400-800 MHz, 
+including full polarization information. While searching 
+for fast radio bursts, we could also find RRATs and new slow pulsars, since 
+a significant fraction of the Galaxy transits each day.
+
+\subsection{Implementation}
+
+We have had a working beamforming backend on the CHIME 
+Pathfinder since October 2015. It has been used primarily 
+for short pulsar observations, but had stability issues 
+on timescales of $\sim$days, meaning we could not run it 
+for long periods without interfering with the regular cosmology acquisition. 
+However in the past several months a number of new features 
+were added that allow not only long-term beamforming captures, 
+but also transient searching. 
+
+ 
+A real-time, multithreaded acquisition code that takes in the VDIF 
+packets coming out of the X-engine, and rearranges them to either be written to disk or search for 
+FRBs\footnote{https://github.com/kmsmith137/ch\_vdif\_assembler}. Attached 
+to this packet reader was a tree-dedispersion search code, some of 
+which had been used before on GBTIM data and a real-time ARO 
+search\footnote{https://github.com/kiyo-masui/burst\_search}.
+The CHIME acquisition software {\tt kotekan} was 
+altered in a number of ways, fixing the long-term 
+stability issues in the beamforming kernel. These systems 
+were synthesized into a real-time transient search backend 
+that has been on sky since May 2016. It is outlined in Fig.~\ref{fig-bf_diagram}
+on \pageref{fig-bf_diagram}.
 
 
 \begin{figure}[!h]
@@ -416,6 +472,19 @@ periodically.}
 \end{center}
 \end{figure}
 
+\subsection{Results}
+As we discuss in chapter \ref{chapter:frb_statistics}, there is 
+a large uncertainty in the FRB rate between 400-800 MHz. There 
+is even greater uncertainty in the expected rate for a 
+telescope like the CHIME Pathfinder. This is because at this time all FRBs
+have been detected with large-collecting area, highly sensitive single-dish 
+telescopes (GBT, Parkes, and Arecibo). Therefore in order to 
+extrapolate the rate estimates on to the Pathfinder, which 
+does not have much collecting area and whose beam is quite large, one 
+needs to know the underlying flux distribution. As we will show 
+in Eq.~\ref{eq-sensitivity_rat}.
+
+
 \section{Conclusion}
 \label{sec:conclusion}
   
@@ -426,5 +495,5 @@ periodically.}
 
 \section*{\centering Acknowledgements}
 
-We thank Ondrej and Nolan and Peterman.
+We thank Andre Recnik
   
