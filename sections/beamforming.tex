@@ -376,13 +376,12 @@ error on the calibration solution as the ratio of the second largest
 eigenvalue, $\lambda_2$, to the largest, $\lambda_1$. For typical 
 frequencies we get values of $\frac{\lambda_2}{\lambda_1}\sim3\%$.
 
-
 These algorithms have been implemented in a pre-beamforming 
 pipeline written in {\tt Python}. Each day a point-source transit 
 is fringestopped and a calibration solution is solved for. 
 The source chosen depends on the solar time of its transit: Since the
 sun is extraordinarily bright in our band it will always appear in the sidelobes,
-, so the transit has to be 
+so the transit has to be 
 at night for good calibration solutions. Historically, 
 we have used Cygnus A in the spring and summer, Cassiopeia A 
 in the summer and fall, and Tau A in the winter. 
@@ -392,7 +391,20 @@ The FPGA then applies complex gains after channelization, which
 in theory should provide the beamforming kernel with voltages 
 whose phases are purely geometric. 
 
+
 \section{FRB VLBI search}
+
+In 1967 Canada achieved an historic feat by doing 
+the first ever successful VLBI observation. The fringes were 
+obtained between DRAO and ARO, with a baseline of 3,074 km \citep{1967Natur.215...38B}. 
+This result was given a ``Milestone'' award from 
+The Institute of Electrical and Electronics Engineers (IEEE), 
+which was also awarded for the inception of the Internet, transmission 
+of transatlantic radio signals, and the discovery of Maxwell's equations \citep{IEEEmilestone}. 
+We have attempted to recreate the same VLBI baseline, but instead of 
+using the considerable spatial resolution on quasars as in 1967, 
+we are attempting to localize FRBs. 
+
 
 \subsection{Motivation}
 
@@ -427,26 +439,53 @@ a significant fraction of the Galaxy transits each day.
 
 We have had a working beamforming backend on the CHIME 
 Pathfinder since October 2015. It has been used primarily 
-for short pulsar observations, but had stability issues 
+for short tracking pulsar observations, but had stability issues 
 on timescales of $\sim$days, meaning we could not run it 
 for long periods without interfering with the regular cosmology acquisition. 
 However in the past several months a number of new features 
 were added that allow not only long-term beamforming captures, 
 but also transient searching. 
-
  
 A real-time, multithreaded acquisition code that takes in the VDIF 
 packets coming out of the X-engine, and rearranges them to either be written to disk or search for 
 FRBs\footnote{https://github.com/kmsmith137/ch\_vdif\_assembler}. Attached 
 to this packet reader was a tree-dedispersion search code, some of 
-which had been used before on GBTIM data and a real-time ARO 
+which had been used before on GreenBank 100m data and a real-time ARO 
 search\footnote{https://github.com/kiyo-masui/burst\_search}.
 The CHIME acquisition software {\tt kotekan} was 
 altered in a number of ways, fixing the long-term 
 stability issues in the beamforming kernel. These systems 
 were synthesized into a real-time transient search backend 
-that has been on sky since May 2016. It is outlined in Fig.~\ref{fig-bf_diagram}
-on \pageref{fig-bf_diagram}.
+that has been on sky since May 2016. 
+It is outlined in Fig.~\ref{fig-bf_diagram}
+on page \pageref{fig-bf_diagram}. 
+
+Since CHIME is a transit telescope with a long north-south beam, 
+our formed beam is effectively confined to the meridian. This means
+we must choose an optimal declination on which 
+to park the beam. As a sanity check, we spent $\sim10$ 
+days pointed 
+at the declination of pulsar B0329+54, which is the 
+brightest switching source in the northern sky in our band. It 
+is dispersed with 26.833 pc cm$^{-3}$ and its individual 
+pulses are bright enough to detect, meaning our tree-dedispersion 
+algorithm ought to find its individual pulses. During the 
+ten or so minutes that the source is in our beam each day, 
+the algorithm looks at time blocks of 100 seconds, searches 
+for DMs between 10-2000 pc cm$^{-3}$ with widths between 
+1-100 ms, and looks for peaks above 8$\sigma$. If it finds something
+it ``triggers'' and writes out an image file containing the peak 
+in DM / arrival time space, a dedispersed waterfall plot, a dedispersed 
+pulse profile, and a fluence frequency spectrum. An example 
+of the B0329+54 is shown in Fig.\ref{fig-triggers}. It also 
+writes {\tt numpy} arrays containing the squared and summed 
+intensity data. It then moves on to the next block of 100 seconds, 
+overlapping with the previous one by 18 seconds. 
+
+
+
+
+
 
 
 \begin{figure}[!h]
@@ -482,7 +521,20 @@ telescopes (GBT, Parkes, and Arecibo). Therefore in order to
 extrapolate the rate estimates on to the Pathfinder, which 
 does not have much collecting area and whose beam is quite large, one 
 needs to know the underlying flux distribution. As we will show 
-in Eq.~\ref{eq-sensitivity_rat}.
+in Eq.~\ref{eq-sensitivity_rat}, the rate depends on the product 
+of the telescope's field-of-view (FoV) and a thermal sensitivity term. 
+This scales $\propto A^{-1} A^\gamma$, where $A$ is collecting area 
+and $\gamma$ is the FRB flux distribution's power-law index, which is 
+$3/2$ if FRBs are non-cosmological and Euclidean. If $\gamma < 1$, 
+as is expected in the cosmological FRB scenario, then 
+small telescopes are actually advantageous over large single-pixel telescopes 
+since the beamsize becomes more important. 
+
+With a dish like the Pathfinder
+the rate is roughly 10 times higher if $\gamma\approx 0.8$ (cosmological scenario) 
+compared to the Euclidean scenario. This is because its relatively 
+low sensitivity per steradian requires there be large numbers 
+of very bright bursts, which one gets from a flat distribution.
 
 
 \section{Conclusion}
