@@ -53,7 +53,7 @@ By coherently combining the voltages of a multi-element array,
 sensitivity can be allocated to small regions of the sky and 
 the array's effective forward gain can be increased. The signal 
 from each antenna, $x_n$, is multiplied by a complex weight whose 
-phases, $\phi_{n}$, are chosen to destructively interfere radio waves 
+phases, $\phi_{n}$, are chosen to maximally destructively interfere radio waves 
 in all directions but the desired pointing. The signals 
 from all antennas are then combined to give the formed-beam 
 voltage stream, $X_{\rm BF}$.
@@ -63,7 +63,7 @@ voltage stream, $X_{\rm BF}$.
 X_{\rm BF} = \sum_{{n}=1}^N a_n e^{i\phi_{n}} x_n
 \end{equation}
 
-\noindent Here $a_n$ are real numbers that can be used to as 
+\noindent Here $a_n$ are real numbers that can be used as 
 amplitude weightings for the antennas. If we define a more 
 general complex weighting, $w_n \equiv a_n e^{i\phi_{n}}$, and 
 switch to vector notation, Eq.~\ref{eq-bf_sum} becomes,
@@ -75,7 +75,8 @@ X_{\rm BF} = \mathbf{w} \, \mathbf{x}^{\rm T} .
 \noindent In general, $X_{\rm BF}$ and $\mathbf{x}^{\rm T}$ will be 
 functions of time and frequency. This is also true for $\mathbf{w}$,
 unless one needs a static, non-tracking beam -- which is the case for the 
-CHIME Pathfinder's transient search. We can write this explicitly as follows. 
+CHIME Pathfinder's transient search, described in
+Sect.~\ref{vlbi_frb}. We can write this explicitly as follows. 
 
 
 \begin{align}
@@ -119,7 +120,7 @@ onto the pointing vector, $\hat{\mathbf{k}}$. This gives,
 
 \begin{equation}
 \label{eqn-phi_n}
-\phi_n = \frac{2\pi}{\lambda} \, \mathbf{d}_n \cdot  {\mathbf{\hat{k}}}
+\phi_n = \frac{2\pi}{\lambda} \, \mathbf{d}_n \cdot  {\mathbf{\hat{k}}},
 \end{equation}
 
 \noindent where we have taken $\mathbf{d}_n$ to be the baseline vector between 
@@ -162,7 +163,7 @@ right-handed coordinate system where $u$ (east-west) and $v$ (north-south) are i
 whose normal is the zenith, and $w$ measures the vertical direction \citep{1986isra.book.....T}.
 They are defined in numbers of wavelengths, with
 $u = d_{\rm ew} / \lambda$, $v = d_{\rm ns} / \lambda$, 
-and $w = d_{\rm vert} / \lambda$. Eq.~\ref{eqn-phi_n} can we expanded 
+and $w = d_{\rm vert} / \lambda$. Eq.~\ref{eqn-phi_n} can be expanded 
 as,
 
 \begin{align}   
@@ -191,7 +192,7 @@ u, & v, & w
 
 These phases are not only essential to beamforming but 
 also for the fringestopping process, which is ubiquitous in 
-interferometric analysis and is descibed in Sec.~\ref{sec-instr_phases}.
+interferometric analysis and is descibed in Sect.~\ref{sec-instr_phases}.
 
 
 \begin{table}[]
@@ -215,12 +216,13 @@ $lon$                                   & Telescope longitude
 \subsection{Instrumental phases}
 \label{sec-instr_phases}
 In a real experiment, if the voltages from each antenna, $x_n$, are summed 
-without any adjustment as written in Eq~\ref{eq-bf_sum}, one should only 
+without any adjustment from those written in Eq~\ref{eq-bf_sum}, one should only 
 expect noise and not a coherent beam. This is because we have assumed 
 the wavefront's differential time-of-arrival across at array 
 is the same time delay seen by the correlator. In fact each 
-signal is further delayed by multiple steps in the signal chain. 
-Digital phases in the electronics can be added by the LNAs and FLAs, and
+signal is further delayed by multiple steps in the signal chain, 
+often randomly. 
+Digital phases in the electronics can be added by the LNAs and FLAs; 
 coaxial cables, whose lengths vary by up to a meter, can rotate 
 the signal by multiple radians. Therefore in order to coherently sum 
 across the array and beamform, the instrumental phases must be removed. 
@@ -235,7 +237,7 @@ altered by an effective gain, $g_n$, and a noise term, $n_n$.
 \noindent We have lumped several terms into $g_n = |g_n| e^{i \phi_{g_n}}$, 
 which is composed of a pointing-dependent beam term
 and any complex gain introduced once light hits the cylinder. 
-Since we really only care about the phase, we can decompose $\arg(g_n)$
+Since we care primarily about the phase, we can decompose $\arg(g_n)$
 as,
 
 \begin{equation}
@@ -245,7 +247,7 @@ as,
 \noindent where $\phi_{\rm beam}$ is the beam's phase for a given pointing, 
 $\phi_{\rm an}$ comes from the analogue chain (dual-pol feed, coax, etc.),  
 $\phi_{\rm e}$ is any phase introduced in the electronics, 
-and $\phi_{\rm fpga}$ are phases applied in the $F$-engine. 
+and $\phi_{\rm fpga}$ are phases applied in the F-engine. 
 
 Since the instrumental phases are effectively random, the simplest 
 way to remove them is to solve for them empirically, usually from 
@@ -255,12 +257,13 @@ assuming the sky's electric field is produced by a single point-source.
 This is tantamount to a delta function at a single direction on the sky.
 
 \begin{align}
+\label{eqn-vis_delta}
 V^{\rm ps}_{m,n} &= \int d^2\mathbf{\hat{k}} \, g_m(\mathbf{\hat{k}}) \, g^*_n(\mathbf{\hat{k}})\, e_m(\mathbf{\hat{k}}) e_n^*(\mathbf{\hat{k}})\, \delta(\mathbf{\hat{k}} - \mathbf{\hat{k}}_{\rm ps})\\
  &= {g}_m(\mathbf{\hat{k}}_{\rm ps}) \, g^*_n(\mathbf{\hat{k}}_{\rm ps})\,e_m(\mathbf{\hat{k}}_{\rm ps}) e_n^*(\mathbf{\hat{k}}_{\rm ps})
 \end{align}
 
-\noindent In this equation $\mathbf{\hat{k}}_{\rm ps}$ is the only direction 
-on the sky with a source --- an approximation whose validity we 
+\noindent In these equations $\mathbf{\hat{k}}_{\rm ps}$ is the only direction 
+on the sky with a source in it --- an approximation whose validity we 
 will discuss below --- and $\delta$ is a Kronecker delta function. 
 
 \begin{equation}
@@ -276,13 +279,15 @@ V_{m, n}^{\rm ps} =
 \end{equation}
 
 \noindent If we explicitly write the phase information of the sky's 
-electric field, we can use 
+electric field, we can use
 
 \begin{equation}
 \label{eqn-tsky}
 e_m(\mathbf{\hat{k}}) e_n^*(\mathbf{\hat{k}}) = T(\mathbf{\hat{k}}) 
-e^{2\pi \,i \,\mathbf{\hat{k}} \cdot \mathbf{d}_{mn}}.
+e^{2\pi \,i \,\mathbf{\hat{k}} \cdot \mathbf{d}_{mn}},
 \end{equation}
+
+\noindent subbing into Eq.~\ref{eqn-vis_delta}
 
 \begin{equation}
 \label{eqn-visibility-temp}
@@ -390,7 +395,7 @@ in theory should provide the beamforming kernel with voltages
 whose phases are purely geometric. 
 
 \subsection{First coherent light}
-Although the majority of the backend was written within a couple  
+Although the majority of the back-end was written within a couple  
 of months, the beamformer required substantial 
 on-sky testing and subsequent debugging. One important debugging tool 
 came from recognizing the equivalence of the summed-and-squared
@@ -436,12 +441,72 @@ output of time-averaged, squared beamforming voltages to
 the $N^2$ visibilities after applying complex 
 weights and summing the correlations. This is effectively 
 off-line beamforming, though the cadence is too slow for 
-, namely studying the time-variable sky. 
+the science goals of the real back-end, namely studying the time-variable sky. 
+As a first test, 
+we would form a stationary beam at the declination of a 
+bright point-source like CasA with only two feeds, 
+which would produce a fringe pattern. We would then take 
+the corresponding CasA transit from the correlated ``cosmology" 
+acquisition, using Eq.~\ref{eqn-bf_sum} and giving only non-zero 
+weights to the two relevant feeds, and check if the two
+fringe patterns were identical. We carried out a series 
+of tests of escalating complexity, for example including more feeds in the sum, updating 
+phases in real-time in order to track sources, and deliberately 
+switching the weights with their conjugate to see if the fringe 
+direction changed. Through these tests several bugs were discovered, 
+including spherical trigonometry errors in the phase 
+calculations and a disagreement between one piece of code's 
+definition of $LST$. 
 
+However, the final hurdle
+--- which amounted to two sign errors in the correlator --- 
+was more fundamental to CHIME's architecture. It was found through 
+early pulsar observations that the beamformer was only summing
+coherently when the instrumental phases that are removed in 
+the FPGAs are solved for with the lower-triangle of the correlation 
+matrix. In other words, instrumental phases were not properly 
+removed in the correlator unless they were applied as 
+$e^{+i\phi_{g_n}}$ instead of $e^{-i\phi_{g_n}}$, as one would expect.
+The perplexing thing was that in two years of analyzing 
+the visibilities output by the correlator, nobody noticed a 
+error in the sign-convention. And indeed, when we started to look
+at the phase of the raw visibilities, we found the argument 
+of an east-west baseline increases with time, which is 
+what one expects from an upper-triangle correlator. This 
+apparent paradox was solved by discovering \textit{two} sign errors that
+effectively cancel each other out, but only if both are applied. 
+
+Our digitizers sample at 800 MHz, taking advantage of the observing 
+band between 400-800 MHz being in the second Nyquist zone \cite{}. 
+However, when we channeling 
+the incoming timestream data in the FPGAs, the complex conjugation 
+associated with using the Nyquist zone was not considered during the 
+Fourier transform. Therefore the channelized voltages leave the F-engine 
+with an opposite sign in the exponential. When they are correlated
+in the X-engine it is also done in reverse order as, 
+
+\begin{equation}
+V_{n, m} = x_n^* x_m
+\end{equation}
+
+\noindent rather than 
+
+\begin{equation}
+V_{n, m} = x_n x_m^*.
+\end{equation}
+
+The second sign convention error does not affect the beamformed 
+output, since that data stream is never correlated. We therefore 
+needed to account for this for the back-end to work. An example 
+of an early verification of the beamformer's sign convention 
+and the first successful tracking observation is shown in Fig.~\ref{fig-bf_b0329}. 
+The collaboration has decided to keep these sign conventions as is
+and make note of it going forward, rather than re-write any low-level 
+software.
 
 
 \begin{figure}[!h]
-\label{fig-bf_diagram}
+\label{fig-bf_b0329}
 \begin{center}
 \includegraphics[trim={0.8in, 0in, 0in, 0in}, scale=0.5]{./figures/beamforming/b0329_testing.jpeg}
 %\vspace{0.0cm}
@@ -466,6 +531,7 @@ and instrumental leakage.}
 
 
 \section{FRB VLBI search}
+\label{vlbi_frb}
 
 In 1967 Canada achieved an historic feat by doing 
 the first ever successful VLBI observation. The fringes were 
@@ -483,14 +549,14 @@ we are attempting to localize FRBs.
 
 The CHIME Pathfinder is meant to have only one synthetic beam. 
 Its purpose is primarily to act as a test-bed for the more powerful 
-pulsar and FRB backends that will be attached to the 
+pulsar and FRB back-ends that will be attached to the 
 full four-cylinder CHIME. However since the Pathfinder is on 
 sky at all times and the beamformer we have built does not 
 interrupt the ongoing cosmology acquisition, we decided to 
 build a preliminary FRB search. We also have as many as three 
 other telescopes onto which we can mount 
 CHIME feeds and observe in our band: the Algonquin Radio Observatory (ARO), 
-the John A. Galt 26m, and the GreenBank 140ft telescope. This would
+the John A. Galt 26m, and the Green Bank 140ft telescope. This would
 allow for the first ever VLBI detection of an FRB. 
 
 This is interesting for a few reasons. From a development 
@@ -510,7 +576,7 @@ a significant fraction of the Galaxy transits each day.
 
 \subsection{Implementation}
 
-We have had a working beamforming backend on the CHIME 
+We have had a working beamforming back-end on the CHIME 
 Pathfinder since October 2015. It has been used primarily 
 for short tracking pulsar observations, but had stability issues 
 on timescales of $\sim$days, meaning we could not run it 
@@ -523,12 +589,12 @@ A real-time, multithreaded acquisition code that takes in the VDIF
 packets coming out of the X-engine, and rearranges them to either be written to disk or search for 
 FRBs\footnote{https://github.com/kmsmith137/ch\_vdif\_assembler}. Attached 
 to this packet reader was a tree-dedispersion search code, some of 
-which had been used before on GreenBank 100m data and a real-time ARO 
+which had been used before on Green Bank 100m data and a real-time ARO 
 search\footnote{https://github.com/kiyo-masui/burst\_search}.
 The CHIME acquisition software {\tt kotekan} was 
 altered in a number of ways, fixing the long-term 
 stability issues in the beamforming kernel. These systems 
-were synthesized into a real-time transient search backend 
+were synthesized into a real-time transient search back-end 
 that has been on sky since May 2016. 
 It is outlined in Fig.~\ref{fig-bf_diagram}
 on page \pageref{fig-bf_diagram}. 
@@ -566,7 +632,7 @@ overlapping with the previous one by 18 seconds.
 \begin{center}
 \includegraphics[trim={1.in, 0in, 2.5in, 0in}, width=1\textwidth]{./figures/beamforming/moose_diagram.png} 
 %\vspace{0.0cm}
-\caption[abc]{Block diagram of the beamforming backend on CHIME Pathfinder. 
+\caption[abc]{Block diagram of the beamforming back-end on CHIME Pathfinder. 
 A calibration solution is obtained from a bright point-source transit, 
 the phases of which are fed into the FPGAs where they are applied as a 
 digital gain. All antenna signals are then sent the $X$-engine, 
