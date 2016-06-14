@@ -321,9 +321,9 @@ Fig.~\ref{fig-fringestop}.
  the phase of a visibility will have a time- and frequency-dependent 
  component, the measured correlation will fringe as the earth rotates in 
  a chromatic way. This effect can be removed by multiplying each visibility by 
- $e^{-i \phi_{\rm mn}(\rm t, \nu)}$, as determined by Eq.~\ref{eq-fringestop_phase}. 
- The top left panel shows the raw correlation as a function of transiting
- $RA$ between feeds 1 and 129, which are of the same polarization but 
+ $e^{-i \phi_{m, n}(\rm t, \nu)}$, as determined by Eq.~\ref{eq-fringestop_phase}. 
+ The top left panel shows the raw correlation between feeds 1 and 129 as a function of transiting
+ $RA$, which are of the same polarization but 
  on opposite cylinders, separated by 21 m. We plot  
  three different frequencies. The panel below the top left
  shows the same complex visibility's phase. The slope, or fringe-rate, decreases 
@@ -360,8 +360,9 @@ signal vector, $\mathbf{x}$, with its Hermitian conjugate.
 If the sky is composed of a single point-source
 then this matrix will be rank one, i.e. there is only one 
 non-zero eigenvalue. One can see this by referring to Eq.~\ref{eqn-tsky} 
-and noting that if the data has been fringestopped, then the 
-sky temperature can be factored out of
+and noting that if the data has been fringestopped, then the phase 
+component (which is different for each correlation) goes away and the 
+sky temperature (which is the same) can be factored out of
 Eq.~\ref{eqn-corrmat}, which becomes
 
 \begin{equation}
@@ -381,9 +382,10 @@ frequencies we get values of $\frac{\lambda_2}{\lambda_1}\sim3\%$.
 
 These algorithms have been implemented in a pre-beamforming 
 pipeline written in {\tt Python}. Each day a point-source transit 
-is fringestopped and a calibration solution is solved for. 
+is fringestopped and a calibration solution is solved for at each frequency. 
 The source chosen depends on the solar time of its transit: Since the
-sun is extraordinarily bright in our band it will always appear in the sidelobes,
+sun is extraordinarily bright in our band it will be in our side-lobes 
+as long as it is above the horizon,
 so the transit has to be 
 at night for good calibration solutions. Historically, 
 we have used Cygnus A in the spring and summer, Cassiopeia A 
@@ -398,9 +400,11 @@ whose phases are purely geometric.
 Although the majority of the back-end was written within a couple  
 of months, the beamformer required substantial 
 on-sky testing and subsequent debugging. One important debugging tool 
-came from recognizing the equivalence of the summed-and-squared
+came from utilizing the equivalence of the summed-and-squared
 high-cadence data that was produced by the beamformer with the 
-full $N^2$ integrated data. The latter is nominally taken with $\sim21$ second
+full $N^2$ integrated data. This is true because the correlation 
+step does not erase any fundamental information about the electric field. 
+The latter is nominally taken with $\sim21$ second
 time samples for 32,896 correlation products coming from 256 feeds. 
 The former is a sum over the feeds which can be integrated in time 
 arbitrarily after squaring. Ignoring the time rebinning for a moment,
@@ -437,16 +441,16 @@ product, $\mathbf{W} \circ \mathbf{V}$. This is identical
 to Eq.~\ref{eqn-bf_sum} if both matrices are Hermitian. 
 
 Using the equivalence we have just described, one can compare the 
-output of time-averaged, squared beamforming voltages to 
+output of the beamformer to 
 the $N^2$ visibilities after applying complex 
 weights and summing the correlations. This is effectively 
 off-line beamforming, though the cadence is too slow for 
 the science goals of the real back-end, namely studying the time-variable sky. 
 As a first test, 
-we would form a stationary beam at the declination of a 
-bright point-source like CasA with only two feeds, 
-which would produce a fringe pattern. We would then take 
-the corresponding CasA transit from the correlated ``cosmology" 
+we would form a stationary beam with only two feeds and let a 
+bright point-source like Cas A drift through, 
+producing a fringe pattern. We would then take 
+the corresponding Cas A transit from the correlated ``cosmology" 
 acquisition, using Eq.~\ref{eqn-bf_sum} and giving only non-zero 
 weights to the two relevant feeds, and check if the two
 fringe patterns were identical. We carried out a series 
@@ -458,9 +462,9 @@ including spherical trigonometry errors in the phase
 calculations and a disagreement between one piece of code's 
 definition of $LST$. 
 
-However, the final hurdle
---- which amounted to two sign errors in the correlator --- 
-was more fundamental to CHIME's architecture. It was found through 
+The final hurdle was more fundamental to CHIME's architecture,
+though in principle it should not affect the cosmology experiment. 
+It was found through 
 early pulsar observations that the beamformer was only summing
 coherently when the instrumental phases that are removed in 
 the FPGAs are solved for with the lower-triangle of the correlation 
@@ -468,28 +472,31 @@ matrix. In other words, instrumental phases were not properly
 removed in the correlator unless they were applied as 
 $e^{+i\phi_{g_n}}$ instead of $e^{-i\phi_{g_n}}$, as one would expect.
 The perplexing thing was that in two years of analyzing 
+
 the visibilities output by the correlator, nobody noticed a 
 error in the sign-convention. And indeed, when we started to look
 at the phase of the raw visibilities, we found the argument 
 of an east-west baseline increases with time, which is 
 what one expects from an upper-triangle correlator. This 
-apparent paradox was solved by discovering \textit{two} sign errors that
+apparent paradox was solved by discovering \textit{two} sign errors, 
+on in the F-engine and one in the X-engine, that
 effectively cancel each other out, but only if both are applied. 
 
 Our digitizers sample at 800 MHz, taking advantage of the observing 
 band between 400-800 MHz being in the second Nyquist zone \cite{}. 
-However, when we channeling 
-the incoming timestream data in the FPGAs, the complex conjugation 
-associated with using the Nyquist zone was not considered during the 
+However, when we channelize
+the incoming time-stream data in the FPGAs, the complex conjugation 
+associated with the aliased second Nyquist zone was not considered during the 
 Fourier transform. Therefore the channelized voltages leave the F-engine 
 with an opposite sign in the exponential. When they are correlated
 in the X-engine it is also done in reverse order as, 
 
 \begin{equation}
-V_{n, m} = x_n^* x_m
+V_{n, m} = x_n^* x_m,
 \end{equation}
 
-\noindent rather than 
+\noindent as opposed to the upper-triangle correlation described by 
+\citet{2015arXiv150306203K}, 
 
 \begin{equation}
 V_{n, m} = x_n x_m^*.
