@@ -37,6 +37,9 @@ the DRAO and ARO. The latter will include constraints on $\alpha$.
 
 \section{Introduction}
 
+Beamforming is a signal processing technique that allows for 
+spatial filtering, and has greatly benefited a diverse set of fields 
+from radar and wireless communications to radio astronomy.
 
   
 % ================================================================================
@@ -45,11 +48,6 @@ the DRAO and ARO. The latter will include constraints on $\alpha$.
   
 \section{Theory and Implementation}
 \label{sec:theory}
-
-Beamforming is a signal processing technique that allows for 
-spatial filtering, and has greatly benefited a diverse set of fields 
-from radar and wireless communications to radio astronomy.
-Historically, this was  % Insert history
 
 By coherently combining the voltages of a multi-element array, 
 sensitivity can be allocated to small regions of the sky and 
@@ -336,7 +334,7 @@ Fig.~\ref{fig-fringestop}.
 % -------------------------------------------- FIGURE 1 --------------------------------------------
 
 
-The $N(N+1)/2$ visibilities we measure can be thought of as 
+The visibilities we measure can be thought of as 
 the upper triangle of an $N\times N$ complex Hermitian 
 matrix, $\mathbf{V}$. This is simply the outer product of the 
 signal vector, $\mathbf{x}$, with its Hermitian conjugate. 
@@ -390,6 +388,81 @@ written to pickle files that are readable by the Pathfinder's FPGAs.
 The FPGA then applies complex gains after channelization, which 
 in theory should provide the beamforming kernel with voltages 
 whose phases are purely geometric. 
+
+\subsection{First coherent light}
+Although the majority of the backend was written within a couple  
+of months, the beamformer required substantial 
+on-sky testing and subsequent debugging. One important debugging tool 
+came from recognizing the equivalence of the summed-and-squared
+high-cadence data that was produced by the beamformer with the 
+full $N^2$ integrated data. The latter is nominally taken with $\sim21$ second
+time samples for 32,896 correlation products coming from 256 feeds. 
+The former is a sum over the feeds which can be integrated in time 
+arbitrarily after squaring. Ignoring the time rebinning for a moment,
+we can write the squared formed beam as,
+
+\begin{align}
+X_{\rm BF} X_{\rm BF}^* &= (w_1 x_1 + w_2 x_2 + ... + w_N x_N) (w_1 x_1 + w_2 x_2 + ... + w_N x_N)^*\\
+&= |w_1|^2|x_1|^2 + ... + |w_N|^2|x_N|^2 + ... + w_1 w_2^* x_1 x_2^* + w_2 w_1^* x_2 x_1^* + ... , 
+\end{align}
+\\
+
+\noindent where, as before, $w_n$ are the 
+complex weights applied in the beamformer 
+and $x_n$ is a voltage stream from antenna $n$.
+This can be rewritten as the sum of the 
+auto correlations and twice the real part of the recorded cross-correlations.
+\\
+
+\begin{equation}
+\label{eqn-bf_sum}
+X_{\rm BF} X_{\rm BF}^* = \sum_{n\le N} |w_n|^2 V_{n, n} + 
+2 \sum_{\substack{n,m\le N \\ n<m}} \Re e\{W_{n, m} V_{n, m}\}
+\end{equation}
+\\
+
+In this equation we have let $W_{n, m} \equiv w_n w_m^*$.
+Since the correlation matrix is Hermitian, its top 
+and bottom triangles are redundant and one needs only to 
+record $\frac{1}{2} N (N+1)$ of the $N^2$ pairwise products.
+If we wrote all pairwise correlations, we would simply need 
+to sum the correlation matrix after applying the relevant 
+weights, i.e. summing after the Hadamard
+product, $\mathbf{W} \circ \mathbf{V}$. This is identical 
+to Eq.~\ref{eqn-bf_sum} if both matrices are Hermitian. 
+
+Using the equivalence we have just described, one can compare the 
+output of time-averaged, squared beamforming voltages to 
+the $N^2$ visibilities after applying complex 
+weights and summing the correlations. This is effectively 
+off-line beamforming, though the cadence is too slow for 
+, namely studying the time-variable sky. 
+
+
+
+\begin{figure}[!h]
+\label{fig-bf_diagram}
+\begin{center}
+\includegraphics[trim={0.8in, 0in, 0in, 0in}, scale=0.5]{./figures/beamforming/b0329_testing.jpeg}
+%\vspace{0.0cm}
+\caption[abc]{First coherent pulsar observations with CHIME. This 
+brief observation of B0329+54 provided us with an idea 
+of the instrument's sensitivity and polarization response. 
+Perhaps more significantly, it taught us that 
+that our X-engine is a lower-triangle correlator, rather than 
+upper-triangle like we thought, and that our F-engine \textit{also}
+conjugates with the opposite sign. \textit{top left:} waterfall plot
+of the pulsar's Stokes I profile over the $\sim$30 minutes when the 
+source enters then exits our beam. \textit{top right:} frequency 
+vs. phase Stokes I, integrated over roughly 15 minutes. 
+\textit{bottom:} time- and frequency-averaged pulse profile 
+for the two polarizations autocorrelations. The difference between 
+the east-west and north-south beams give an estimate for Stokes Q, which 
+includes both intrinsic polarization ($\sim10\%$ for this source)
+and instrumental leakage.} 
+\vspace{0.4cm}   
+\end{center}
+\end{figure}
 
 
 \section{FRB VLBI search}
