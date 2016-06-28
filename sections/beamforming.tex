@@ -615,9 +615,8 @@ at the declination of pulsar B0329+54, which is the
 brightest switching source in the northern sky in our band. It 
 is dispersed with 26.833 pc cm$^{-3}$ and its individual 
 pulses are bright enough to detect, meaning our tree-dedispersion 
-algorithm ought to find its individual pulses. During the 
-ten or so minutes that the source is in our beam each day, 
-the algorithm looks at time blocks of 100 seconds, searches 
+algorithm ought to find its individual pulses. The search 
+algorithm looks at time blocks of 100 seconds, searches 
 for DMs between 10-2000 pc cm$^{-3}$ with widths between 
 1-100 ms, and looks for peaks above 8$\sigma$. If it finds something
 it ``triggers'' and writes out an image file containing the peak 
@@ -629,7 +628,34 @@ intensity data. It then moves on to the next block of 100 seconds,
 overlapping with the previous one by 18 seconds. 
 
 
+\begin{figure}[!h]
+\label{fig-b0329_trigger}
+\begin{center}
+\includegraphics[trim={0in, 0in, 0in, 0in}, scale=0.75]{./figures/beamforming/b0329_trigger.png}
+\caption[abc]{Example of a figure created after a trigger 
+on the Pathfinder FRB search. This trigger was during the transit of 
+pulsar B0329+54, on whose declination our synthetic beam was 
+parked. Further information about the pulse is 
+included at the top of the figure, including 
+signal-to-noise ratio, width, and dispersion index. Though the 
+beam is not well calibrated in absolute flux, this pulsar 
+is of order 10 Jy, so this pulse might be half as bright 
+as the original Lorimer burst \citep{lorimer-2007}. 
+\textit{Top panel:} The search results 
+in dispersion measure vs. arrival time space. The red, butterfly-like 
+cluster of points around DM of 25 pc cm$^{-3}$ and arrival time 
+6 seconds into the 100 second block, 
+shows the detection of a single B0329+54 pulse. 
+\textit{Second panel:} A frequency 
+vs. time colour map showing the dedispersed pulse. \textit{Third panel:} 
+Pulse profile for this trigger, averaged over frequency after 
+masking RFI and weighting by inverse system temperature. \textit{Bottom panel:}
+Fluence vs. frequency plot of the pulse.}  
+\vspace{0.4cm}   
+\end{center}
+\end{figure}
 
+\subsection{ARO FRB search}
 
 
 
@@ -653,7 +679,6 @@ searched for FRBs after squaring and integrating to $\sim$millisecond cadence
 using a tree-dedispersion algorithm. If there is a trigger, then the corresponding 
 baseband data is hard-linked. Old files that haven't been hard-linked are deleted
 periodically.}
-\vspace{0.4cm}   
 \end{center}
 \end{figure}
 
@@ -661,7 +686,8 @@ periodically.}
 As we discuss in chapter \ref{chapter:frb_statistics}, there is 
 a large uncertainty in the FRB rate between 400-800 MHz. There 
 is even greater uncertainty in the expected rate for a 
-telescope like the CHIME Pathfinder. This is because at this time all FRBs
+telescope like the CHIME Pathfinder. This is because at the moment of 
+this thesis all FRBs
 have been detected with large-collecting area, highly sensitive single-dish 
 telescopes (GBT, Parkes, and Arecibo). Therefore in order to 
 extrapolate the rate estimates on to the Pathfinder, which 
@@ -681,6 +707,50 @@ the rate is roughly 10 times higher if $\gamma\approx 0.8$ (cosmological scenari
 compared to the Euclidean scenario. This is because its relatively 
 low sensitivity per steradian requires there be large numbers 
 of very bright bursts, which one gets from a flat distribution.
+
+\subsection{False positives}
+
+Most transient searches are plagued by non-celestial sources masquerading 
+as astronomical events. In the case of dedispersion searches on 
+radio telescopes, these can be caused by RFI, numerical relics 
+in the signal chain, or statistical fluctuations. 
+At UTMOST, \citet{2016MNRAS.458..718C} found 
+10$^2$ events per hour in transit mode across all beams. \citet{2015MNRAS.451.3933P}
+found the source of an elusive but persistent set of triggers 
+to be due to an on-site microwave oven's magnetron shutdown phase. These 
+``Perytons" are unique in their conspiratorial ability to 
+look like a real burst, but they are a subset of a broader zoo 
+of RFI-induced false triggers. 
+
+At DRAO, although the region is officially 
+protected from radio contamination, about 15$\%$ of the CHIME
+band is presently lost to RFI (see the bottom left 
+panel of Fig.~\ref{fig-lte_trigger}). Recently, Rogers Communications 
+paid several billion Canadian dollars for a 700 MHz 
+Long-Term Evolution (LTE) band for cellphone service.
+Unlike the satellite television 
+stations that we see at 500-600 MHz, the LTE band 
+fluctuates on timescales of milliseconds to seconds, which can affect 
+a millisecond transient search. Fig.~\ref{fig-lte_trigger} shows 
+an example of this RFI false positive from the LTE band. 
+
+%trim={<left> <lower> <right> <upper>}
+\begin{figure}[!h]
+\label{fig-lte_trigger}
+\begin{center}
+\includegraphics[trim={0in 0in 0in 0in}, scale=0.4]
+{./figures/beamforming/lte_trigger.png}
+\vspace{0.0cm}
+\caption[abc]{A false positive trigger caused by the flickering 
+LTE band that, the likes of which 
+caused $\sim$90$\%$ of the alerts before it was removed.
+It is of course simple to reject; one can just mask 
+out the relevant channels.
+However, it provides a useful example of the types of 
+short-timescale RFI that can affect an FRB survey.}
+\end{center}
+\end{figure}
+
 
 
 \section{Conclusion}
