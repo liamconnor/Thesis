@@ -2,35 +2,21 @@
 \label{chapter:beamforming}
 \chaptermark{Beamforming}
 
-
-
 % ================================================================================
 % CHAPTER OVERVIEW
 % ================================================================================
 
 \section{Chapter Overview}
 
-In an era when electric fields can be sampled billions of 
-times per second, radio telescopes are becoming more and more digital. 
-While the cost of constructing large single-dish telescopes is not expected to
-decrease substantially, the cost of building large computing clusters is, 
-which makes it economically and strategically sensible to 
-point one's telescope in software, as with digital beamforming.
-Beamforming is particularly essential to CHIME. The pulsar back-end will rely on
-brute-force beamforming in order to track ten sources at a time, 24-7.  
-The FRB experiment will FFT-beamform to generate 1024 fan-beams, 
-in order to search them in real time for radio transients. And the cosmology 
-experiment has always left itself the option of beamforming, whose 
-computing cost scales as $N\log N$, as 
-an alternative to the full $N^2$ correlation. This chapter outlines the 
+This chapter outlines the 
 basic theory behind digital beamforming, and describes the commissioning 
 of the first beamformer on CHIME Pathfinder. This includes the synthesis 
 of several different software packages, the implementation of an early scheduler, 
 and an automated point-source calibration daemon that removes drifting instrumental 
 gains in real-time. We will also detail early pulsar 
-work and the creation of an ongoing VLBI FRB search between 
-the DRAO and ARO. The latter will include constraints on $\alpha$.
-
+work and the beamformer's first light. 
+Finally, the creation of an ongoing VLBI FRB search between 
+the DRAO and ARO will be outlined, including early results. 
 % ================================================================================
 % INTRODUCTION
 % ================================================================================
@@ -39,8 +25,32 @@ the DRAO and ARO. The latter will include constraints on $\alpha$.
 
 Beamforming is a signal processing technique that allows for 
 spatial filtering, and has greatly benefited a diverse set of fields 
-from radar and wireless communications to radio astronomy.
+from radar and wireless communications to radio astronomy 
+\citep{1988IASSP...5....4V}. Whether being used in phased-array RADAR
+\citep{2007BAMS...88.1753Z}, 
+ultrasonic imaging \citep{macovski1983medical}, or 
+wide-band radio astronomy \citep{2013PASA...30....7T}, beamforming 
+allows for heightened sensitivity or output to select spatial
+modes. This usually involves a sensor (in our case an antenna)
+being used alongside a processor (in our case, a computing cluster) 
+\citep{1988IASSP...5....4V}.  
 
+Modern astronomy will benefit greatly from this
+technology. 
+In an era when electric fields can be sampled billions of 
+times per second, radio telescopes are becoming more and more digital. 
+While the cost of constructing large single-dish telescopes is not expected to
+decrease substantially, the cost of building large computing clusters is, 
+which makes it economically and strategically sensible to 
+point one's telescope in software, as with digital beamforming.
+Beamforming is particularly essential to CHIME. 
+The pulsar back-end will rely on
+brute-force beamforming in order to track ten sources at a time, 24-7.  
+The FRB experiment will FFT-beamform to generate 1024 fan-beams, 
+in order to search them in real time for radio transients. And the cosmology 
+experiment has always left itself the option of beamforming, whose 
+computing cost scales as $N\log N$, as 
+an alternative to the full $N^2$ correlation.
   
 % ================================================================================
 % THEORY AND IMPLEMENTATION
@@ -622,7 +632,7 @@ for DMs between 10-2000 pc cm$^{-3}$ with widths between
 it ``triggers'' and writes out an image file containing the peak 
 in DM / arrival time space, a dedispersed waterfall plot, a dedispersed 
 pulse profile, and a fluence frequency spectrum. An example 
-of the B0329+54 is shown in Fig.\ref{fig-triggers}. It also 
+of the B0329+54 is shown in Fig.\ref{fig-b0329_trigger}. It also 
 writes {\tt numpy} arrays containing the squared and summed 
 intensity data. It then moves on to the next block of 100 seconds, 
 overlapping with the previous one by 18 seconds. 
@@ -761,7 +771,5 @@ short-timescale RFI that can affect an FRB survey.}
 % ACKNOWLEDGEMENTS
 % ================================================================================
 
-\section*{\centering Acknowledgements}
 
-We thank Andre Recnik
   
