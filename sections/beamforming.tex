@@ -6,15 +6,21 @@
 % CHAPTER OVERVIEW
 % ================================================================================
 
+% ======= Liam Notes  ========
+
+% Need to discuss interferometry in the introduction,
+% I think.
+
 \section{Chapter Overview}
 
-This chapter outlines the 
-basic theory behind digital beamforming, and describes the commissioning 
-of the first beamformer on CHIME Pathfinder. This includes the synthesis 
-of several different software packages, the implementation of an early scheduler, 
-and an automated point-source calibration daemon that removes drifting instrumental 
-gains in real-time. We will also detail early pulsar 
-work and the beamformer's first light. 
+This chapter outlines the basic theory behind 
+digital beamforming, and describes the commissioning 
+of the first beamformer on CHIME Pathfinder. This 
+includes the synthesis of several different software packages, 
+the implementation of a scheduler, 
+and an automated point-source calibration daemon that 
+removes drifting instrumental gains in real-time. We will 
+also detail early pulsar work and the beamformer's first light. 
 Finally, the creation of an ongoing VLBI FRB search between 
 the DRAO and ARO will be outlined, including early results. 
 % ================================================================================
@@ -39,7 +45,7 @@ Beamforming is particularly essential to CHIME.
 The pulsar back-end will rely on
 brute-force beamforming in order to track ten sources at a time, 24-7.  
 The FRB experiment will FFT-beamform to generate 1024 fan-beams, 
-in order to search them in real time for radio transients. And the cosmology 
+in order to search them in real time for radio transients. Finally, the cosmology 
 experiment has always left itself the option of beamforming, whose 
 computing cost scales as $N\log N$, as 
 an alternative to the full $N^2$ correlation.
@@ -55,9 +61,10 @@ By coherently combining the voltages of a multi-element array,
 sensitivity can be allocated to small regions of the sky and 
 the array's effective forward gain can be increased. The signal 
 from each antenna, $x_n$, is multiplied by a complex weight whose 
-phases, $\phi_{n}$, are chosen to maximally destructively interfere radio waves 
-in all directions but the desired pointing. The signals 
-from all antennas are then combined to give the formed-beam 
+phases, $\phi_{n}$, are chosen a priori to maximally destructively interfere radio waves 
+in all directions but the desired pointing. After applying 
+such weights, the signals 
+from all antennas are combined to give the formed-beam 
 voltage stream, $X_{\rm BF}$.
 
 \begin{equation}
@@ -78,17 +85,17 @@ X_{\rm BF} = \mathbf{w} \, \mathbf{x}^{\rm T} .
 functions of time and frequency. This is also true for $\mathbf{w}$,
 unless one needs a static, non-tracking beam -- which is the case for the 
 CHIME Pathfinder's transient search, described in
-Sect.~\ref{vlbi_frb}. We can write this explicitly as follows. 
+Sect.~\ref{vlbi_frb}. We can write this explicitly as follows,
 
 
 \begin{align}
      \mathbf{w}_{\rm t \nu} &= \left (a_1(\nu) e^{i \phi_1(\nu)}, \, 
      a_2(\nu) e^{i \phi_2(\nu)}, ... \,, \,a_N(\nu) e^{i \phi_N(\nu)} \right )\\
      \mathbf{x}_{\rm t \nu} &= \left ( x_1(\rm{t}, \nu), \, x_2(\rm{t}, \nu), 
-     ..., \, x_N(\rm{t}, \nu) \right )
+     ..., \, x_N(\rm{t}, \nu) \right ).
 \end{align}
 
-The voltage stream is then effectively squared and integrated 
+The voltage stream, $X_{\rm BF}$, is then effectively squared and integrated 
 to give a visibility stream. 
 In the case of CHIME, $X_{\rm BF}$ corresponds to a single polarization 
 so to get the full Stokes information one must compute the 
@@ -97,6 +104,7 @@ and their cross-correlation. The Stokes vector can be written as,
 
 % Make sure Stokes stuff is already defined.
 \begin{equation}
+\mathbf{S} = 
 \begin{pmatrix}
 I \\ 
 Q \\ 
@@ -110,7 +118,6 @@ V
 \, \Im m(X_{\rm ew} X_{\rm ns}^*)\,
 \end{pmatrix}.
 \end{equation}
-
 
 
 \subsection{Geometric phase}
@@ -127,7 +134,8 @@ onto the pointing vector, $\hat{\mathbf{k}}$. This gives,
 
 \noindent where we have taken $\mathbf{d}_n$ to be the baseline vector between 
 feed $n$ and an arbitrary reference point, and $\phi_n$ is the corresponding 
-phase difference. A sketch for this is shown in Fig.~\ref{fig-bf_diagram} on page 
+phase difference. A sketch for this is shown in 
+Fig.~\ref{fig-bf_diagram} on page 
 \pageref{fig-bf_diagram}.
 
 
@@ -239,7 +247,7 @@ altered by an effective gain, $g_n$, and a noise term, $n_n$.
 \noindent We have lumped several terms into $g_n = |g_n| e^{i \phi_{g_n}}$, 
 which is composed of a pointing-dependent beam term
 and any complex gain introduced once light hits the cylinder. 
-Since we care primarily about the phase, we can decompose $\arg(g_n)$
+Since we care primarily about the phase, we can decompose $\phi_{g_n}$
 as,
 
 \begin{equation}
@@ -247,7 +255,7 @@ as,
 \end{equation}
 
 \noindent where $\phi_{\rm beam}$ is the beam's phase for a given pointing, 
-$\phi_{\rm an}$ comes from the analogue chain (dual-pol feed, coax, etc.),  
+$\phi_{\rm an}$ comes from the analog chain (dual-pol feed, coax, etc.),  
 $\phi_{\rm e}$ is any phase introduced in the electronics, 
 and $\phi_{\rm fpga}$ are phases applied in the F-engine. 
 
@@ -380,11 +388,13 @@ of this calibration depends on the validity of our assumption
 that the correlation matrix is rank one. We can estimate the 
 error on the calibration solution as the ratio of the second largest 
 eigenvalue, $\lambda_2$, to the largest, $\lambda_1$. For typical 
-frequencies we get values of $\frac{\lambda_2}{\lambda_1}\sim3\%$.
+frequencies we get values of $\frac{\lambda_2}{\lambda_1}\sim2\%$ 
+when using Cyg A or Cas A.
 
 These algorithms have been implemented in a pre-beamforming 
-pipeline written in {\tt Python}. Each day a point-source transit 
-is fringestopped and a calibration solution is solved for at each frequency. 
+pipeline written in {\tt Python}. Every day a point-source transit 
+is fringestopped and a calibration solution is solved for 
+at each frequency.
 The source chosen depends on the solar time of its transit: Since the
 sun is extraordinarily bright in our band it will be in our side-lobes 
 as long as it is above the horizon,
@@ -393,7 +403,7 @@ at night for good calibration solutions. Historically,
 we have used Cygnus A in the spring and summer, Cassiopeia A 
 in the summer and fall, and Tau A in the winter. 
 Whatever we calibrate off of, the phases of that solution are 
-written to pickle files that are readable by the Pathfinder's FPGAs.
+written to pickle files that are then fed to the Pathfinder's FPGAs.
 The FPGA then applies complex gains after channelization, which 
 in theory should provide the beamforming kernel with voltages 
 whose phases are purely geometric. 
@@ -416,13 +426,13 @@ we can write the squared formed beam as,
 X_{\rm BF} X_{\rm BF}^* &= (w_1 x_1 + w_2 x_2 + ... + w_N x_N) (w_1 x_1 + w_2 x_2 + ... + w_N x_N)^*\\
 &= |w_1|^2|x_1|^2 + ... + |w_N|^2|x_N|^2 + ... + w_1 w_2^* x_1 x_2^* + w_2 w_1^* x_2 x_1^* + ... , 
 \end{align}
-\\
 
 \noindent where, as before, $w_n$ are the 
 complex weights applied in the beamformer 
 and $x_n$ is a voltage stream from antenna $n$.
 This can be rewritten as the sum of the 
-auto correlations and twice the real part of the recorded cross-correlations.
+auto correlations and twice the real part of the recorded 
+phase-shifted cross-correlations.
 \\
 
 \begin{equation}
@@ -447,7 +457,8 @@ output of the beamformer to
 the $N^2$ visibilities after applying complex 
 weights and summing the correlations. This is effectively 
 off-line beamforming, though the cadence is too slow for 
-the science goals of the real back-end, namely studying the time-variable sky. 
+the science goals of the real beamforming 
+back-end, namely studying the time-variable sky. 
 As a first test, 
 we would form a stationary beam with only two feeds and let a 
 bright point-source like Cas A drift through, 
@@ -474,18 +485,17 @@ matrix. In other words, instrumental phases were not properly
 removed in the correlator unless they were applied as 
 $e^{+i\phi_{g_n}}$ instead of $e^{-i\phi_{g_n}}$, as one would expect.
 The perplexing thing was that in two years of analyzing 
-
 the visibilities output by the correlator, nobody noticed a 
 error in the sign-convention. And indeed, when we started to look
 at the phase of the raw visibilities, we found the argument 
 of an east-west baseline increases with time, which is 
 what one expects from an upper-triangle correlator. This 
-apparent paradox was solved by discovering \textit{two} sign errors, 
-on in the F-engine and one in the X-engine, that
+apparent paradox was solved by discovering \textit{two} sign 
+reversals, one in the F-engine and one in the X-engine, that
 effectively cancel each other out, but only if both are applied. 
 
 Our digitizers sample at 800 MHz, taking advantage of the observing 
-band between 400-800 MHz being in the second Nyquist zone \cite{}. 
+band between 400-800 MHz being in the second Nyquist zone.
 However, when we channelize
 the incoming time-stream data in the FPGAs, the complex conjugation 
 associated with the aliased second Nyquist zone was not considered during the 
