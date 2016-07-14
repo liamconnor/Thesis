@@ -45,7 +45,7 @@ The FRB experiment will FFT-beamform to generate 1024 fan-beams,
 in order to search them in real time for radio transients. Finally, the cosmology 
 experiment has always left itself the option of beamforming, whose 
 computing cost scales as $N\log N$, as 
-an alternative to the full $N^2$ correlation.
+an alternative to the full-$N^2$ correlation.
   
 % ================================================================================
 % THEORY AND IMPLEMENTATION
@@ -406,7 +406,7 @@ of months, the beamformer required substantial
 on-sky testing and subsequent debugging. One important debugging tool 
 came from utilizing the equivalence of the summed-and-squared
 high-cadence data that was produced by the beamformer with the 
-full $N^2$ integrated data. This is true because the correlation 
+full-$N^2$ integrated data. This is true because the correlation 
 step does not erase any fundamental information about the electric field. 
 The latter is nominally taken with $\sim21$ second
 time samples for 32,896 correlation products coming from 256 feeds. 
@@ -689,7 +689,7 @@ pulses are bright enough to detect, meaning our tree-dedispersion
 algorithm ought to find its individual pulses. The search 
 algorithm looks at time blocks of 100 seconds, searches 
 for DMs between 10-2000 pc cm$^{-3}$ with widths between 
-1-100 ms, and looks for peaks above 8.5$\sigma$. If it finds something
+1-100 ms, and looks for peaks above 8$\sigma$. If it finds something
 it ``triggers'' and writes out an image file containing the peak 
 in DM / arrival time space, a dedispersed waterfall plot, a dedispersed 
 pulse profile, and a fluence frequency spectrum. An example 
@@ -809,11 +809,11 @@ band is presently lost to RFI (see the bottom left
 panel of Fig.~\ref{fig-lte_trigger}). Recently, Rogers Communications 
 paid several billion Canadian dollars for a 700 MHz 
 Long-Term Evolution (LTE) band for cellphone service.
-Unlike the satellite television 
-stations that we see at 500-600 MHz, the LTE band 
-fluctuates on timescales of milliseconds to seconds, which can affect 
-a millisecond transient search. Fig.~\ref{fig-lte_trigger} shows 
-an example of this RFI false positive from the LTE band. 
+Unlike the satellite television stations that we see at 500-600 MHz, 
+the LTE band fluctuates on timescales of milliseconds to seconds, 
+which can affect a millisecond transient search. 
+Fig.~\ref{fig-lte_trigger} shows an example of this RFI false 
+positive from the LTE band. 
 
 
 %trim={<left> <lower> <right> <upper>}
@@ -833,24 +833,103 @@ short-timescale RFI that can affect an FRB survey.}
 \end{center}
 \end{figure}
 
+
 To mitigate this, frequency channels that are known 
 to be contaminated are masked out. Zeroing the LTE band,
 for instance, removed $\sim$90$\%$ of the false-positive triggers. 
 Once this was done, we find a false-trigger rate of 
 approximately one per two hours. This is estimated 
-by inspecting each trigger visually. 
+by inspecting each trigger visually. Though the rate 
+had been greatly reduced, it is still a 1000:1 ratio of 
+false positives to real events in the case where we detect 
+one FRB every three months (for a detailed estimate see Sect.~\ref{chimerate}
+in Chapter \ref{chapter:frb_statistics}). With this in mind, 
+the SNR threshold was increased from 8$\sigma$ to 9$\sigma$. 
+This was done because the false triggers tend to occur 
+with significance very close to the cutoff. Even if they are 
+not perfectly Gaussian, the number of 6$\sigma$ events is 
+far larger than the number of 8$\sigma$ events, of which 
+there are many more than 10$\sigma$ events. 
 
-Using a signal-to-noise cutoff of $s_m$, the fraction 
-of events one expects above $s$ is given by,
+This is less true for FRBs, whose brightness distribution 
+are described by a power-law. Using a signal-to-noise 
+cutoff of $s_\mathrm{min}$, the fraction 
+of detected events one expects above $s$ is given by,
 
 \begin{equation}
-f(>s) = \left(\frac{s}{s_m}\right)^\alpha
+f(>s) = \left(\frac{s}{s_\mathrm{min}}\right)^{-\alpha}.
 \end{equation}
 
+\noindent The signal-to-noise at which $f=0.5$ is 
+12.7 and 19 for $\alpha=1.5$ and $\alpha=0.8$ respectively. 
+The fraction of events one expects between 8-9$\sigma$ is 
+$f(>8) - f(>9) \approx 16\%$ for the Euclidean case, 
+and $8\%$ if $\alpha$ is 0.8. Therefore half the true events 
+the experiment detects will unmistakably celestial, whether they 
+are cosmological or Euclidean, and by increasing the threshold 
+to 9$\sigma$ one only decreases the survey speed by of order 
+ten percent. 
+
+\begin{figure}[!h]
+\label{fig-scatterhist}
+\begin{center}
+\includegraphics[trim={0in 0in 0in 0in}, scale=0.5]
+{./figures/beamforming/dm_dist_falsepositives.png}
+\vspace{0.0cm}
+\caption[abc]{This figure shows the distribution 
+     of false-positives in DM and signal-to-noise. The 
+     embedded normalized histogram shows the clustering of events 
+     near the threshold of 8$\sigma$. One can see that by 
+     increasing the threshold to $\sim$9-10, half of all 
+     false triggers could be avoided. The scatter plot shows 
+     DM vs. signal-to-noise for the same set of triggers. The 
+     high-significance tail in the histogram seem to all be clustered 
+     at very low DMs, near the minimum DM that is searched 
+     (10 pc cm$^{-3}$). This makes it easy to differentiate truly 
+     ``bright" events from high-signal-to-noise false positives.}
+\end{center}
+\end{figure}
 
 \section{Conclusion}
-\label{sec:conclusion}
-  
+\label{sec:beamforming_conclusion}
+
+Digital beamforming is a powerful tool that affords modern 
+radio telescopes enormous fields-of-view without 
+sacrificing resolution. It is no longer strictly necessary 
+to build large steerable reflectors, the cost of which scales 
+roughly as diameter cubed\footnote{https://www.astron.nl/~mag/dokuwiki/lib/exe/fetch.php?media=radio\_astronomy\_lec\_2\_ma\_garrett.pdf}, 
+since spatial filtering can be done in software.
+In this chapter 
+we have walked through the basic mathematical formalism 
+for beamforming. We have calculated the requisite geometric 
+delays, which also allow us to ``fringestop" the data. 
+This process was 
+put to use for phase-calibration of transiting point-sources, 
+a step which is vital to beamforming. 
+
+The CHIME Pathfinder now has a stable beamforming back-end
+that runs in parallel with the full-$N^2$ cosmology acquisition.
+The back-end provides us with a tracking synthetic beam that 
+dumps baseband data to disk with 1024 391 kHz channels at 
+2.56 microseconds. We have outlined the commissioning of this 
+back-end, including the first coherent pulsar observations on CHIME.
+
+We have also described a new project to localize FRBs with 
+milli-arcsecond resolution using VLBI between Penticton, BC 
+and Algonquin Park, Ontario. The first component 
+of this project is a real-time transient search on the Pathfinder's 
+formed beam, which has been on-sky searching since early May 2016. 
+Though we have not found any FRBs yet, the non-detection 
+allows us to test the cosmological-origin hypothesis. This is 
+because FRBs coming from $z\approx0.3-1$ will have a flatter 
+flux distribution than a more local population, which 
+will obey $N(>S)\propto S^{-1.5}$. The cosmological hypothesis implies that 
+there exists surplus of ultra-bright bursts that could be 
+seen by a relatively insensitive instrument like that Pathfinder.
+We found that with 
+
+The ARO 
+
 
 % ================================================================================
 % ACKNOWLEDGEMENTS
