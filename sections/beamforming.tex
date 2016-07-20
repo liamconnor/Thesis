@@ -553,7 +553,8 @@ and instrumental leakage.}
 In 1967 Canada achieved an historic feat by doing 
 the first ever successful very long 
 baseline interferometry (VLBI) observation. The fringes were 
-obtained between DRAO and ARO, with a baseline of 3,074 km \citep{1967Natur.215...38B}. 
+obtained between DRAO and ARO, with a baseline of 3,074\,km 
+\citep{1967Natur.215...38B}. 
 This result was given a ``Milestone'' award from 
 The Institute of Electrical and Electronics Engineers (IEEE), 
 which was also awarded for the inception of the Internet, transmission 
@@ -561,7 +562,8 @@ of transatlantic radio signals, and the discovery of Maxwell's
 equations\footnote{http://ethw.org/Milestones:List\_of\_IEEE\_Milestones}. 
 We have attempted to recreate the same VLBI baseline, but instead of 
 using the considerable spatial resolution on quasars as in 1967, 
-we are attempting to localize FRBs. 
+we are attempting to localize FRBs, and in place of the 
+26\,m telescope we will use the Pathfinder's formed beam.
 
 
 \subsection{Motivation}
@@ -584,33 +586,23 @@ CHIME-FRB pipeline, including the rate of
 RFI false-positives, our algorithm's search 
 efficiency, and specs on the regularity and precision of instrumental 
 gain removal. It will also give us a good sense of how the real CHIME 
-beams behave on the sky. We would also be able to test the claims made by
-\citet{2016arXiv160606795V}, who claim there is now evidence 
-for a flat fluence distribution of FRBs, suggesting 
-that they are cosmological in nature 
-(see Chapter \ref{chapter:frb_statistics} for our statistical
-analysis of this question). 
-This implies there are a relatively large number of 
-ultra-bright bursts,
-and that survey speed is determined by FoV rather than 
-thermal sensitivity. The Pathfinder would be an excellent 
-tool to test this hypothesis, as a non-detection after multiple months 
-would call it into question. 
+beams behave on the sky. 
 
+Beyond just instrumental development, this work
+opens up several avenues for new science. 
 Most interestingly, 
-we could reasonably expect to see a burst after several months of 
-observing at multiple locations. Localization is by far the most 
+we could reasonably expect to see a few bursts per year in 
+VLBI. Localization is by far the most 
 important next step in determining the origin of FRBs, and 
-such a VLBI detection would achieve this. This particular VLBI 
+such a long-baseline detection would achieve this. This particular VLBI 
 array, whose baselines are thousands of kilometers, would provide 
 the necessary spatial resolution to locate the source 
 within its galaxy. This is demonstrated in Fig.~\ref{fig-m51}.
-On top of this, we would not only detect a burst with milli-arcsecond resolution,
-but also would the first source in our band, at 400-800 MHz, 
-including full polarization information. Since the search 
-would be 24/7, at very little cost we could write to disk 
-millisecond intensities. We can therefore search for slow pulsars 
-and RRATS, since a significant fraction of the Galaxy transits each day.
+On top of this, we would not only detect a burst with 
+milli-arcsecond resolution, but it would also be the first source 
+in our band, at 400-800 MHz. We 
+would be writing baseband and therefore full-polarization information,
+which is not true of most FRBs.
 
 \begin{figure}[!h]
 \label{fig-m51}
@@ -622,14 +614,30 @@ and RRATS, since a significant fraction of the Galaxy transits each day.
      in a FRB VLBI effort.
      The image shows M51, which is about 20 kpc across, if it
      were at redshift 0.5. 2" resolution ($\sim$10$^5$ wavelengths, or $\sim$
-     50 km at 600 MHz.) cannot distinguish between the 
+     50\,km at 600 MHz.) cannot distinguish between the 
      Galactic center and the edge of the disk. On the other hand,
      0.03" ($\sim$10$^7$ wavelengths)
-     is the resolution of the 3,074 km DRAO-ARO baseline,  
+     is the resolution of the 3,074\,km DRAO-ARO baseline,  
      which can localize the source well within the galaxy, even at 
      high redshifts.}  
 \end{center}
 \end{figure}
+
+The Pathfinder beam could be used on its own to constrain 
+the location of FRBs via their brightness distribution.
+Specifically, we could test the claims made by
+\citet{2016arXiv160606795V} who suggest there is now evidence 
+for a flat fluence distribution of FRBs, implying 
+that they are cosmological in nature 
+(see Chapter \ref{chapter:frb_statistics} for our detailed statistical
+analysis of this issue). 
+This would mean there are a relatively large number of 
+ultra-bright bursts, 
+and that survey speed is determined by FoV rather than 
+thermal sensitivity. The Pathfinder would be an excellent 
+tool to test this hypothesis, as a non-detection after multiple months 
+would call it into question. 
+
 
 \subsection{Implementation}
 
@@ -651,7 +659,7 @@ A real-time, multithreaded acquisition code that takes in the VDIF
 packets coming out of the X-engine, and rearranges them to either be written to disk or search for 
 FRBs\footnote{https://github.com/kmsmith137/ch\_vdif\_assembler}. Attached 
 to this packet reader was a tree-dedispersion search code, some of 
-which had been used before on Green Bank 100 m data and a real-time ARO 
+which had been used before on Green Bank 100\,m data and a real-time ARO 
 search\footnote{https://github.com/kiyo-masui/burst\_search}.
 The CHIME acquisition software {\tt kotekan} was 
 altered in a number of ways, fixing the long-term 
@@ -665,7 +673,7 @@ on page \pageref{fig-bf_diagram}.
 \begin{figure}[!h]
 \label{fig-bf_diagram}
 \begin{center}
-\vspace{-.1in}
+\vspace{-0.5in}
 \includegraphics[trim={1.in, 0in, 2.5in, 0in}, width=1\textwidth]{./figures/beamforming/moose_diagram.png} 
 %\vspace{0.0cm}
 \caption[abc]{Block diagram of the beamforming back-end on CHIME Pathfinder. 
@@ -766,12 +774,14 @@ back-end is outlined in Fig.~\ref{fig-aro_diagram}.
 \end{figure}
 
 \subsection{Results}
+
+\subsection{A flat brightness distribution?}
 As we discuss in chapter \ref{chapter:frb_statistics}, there is 
 a large uncertainty in the FRB rate between 400-800 MHz. There 
 is even greater uncertainty in the expected rate for a 
-telescope like the CHIME Pathfinder. This is because at the moment of 
-this thesis all FRBs
-have been detected with large-collecting area, highly sensitive single-dish 
+telescope like the CHIME Pathfinder. This is because at this time
+all FRBs
+have been detected with large collecting area, highly sensitive single-dish 
 telescopes (GBT, Parkes, and Arecibo). Therefore in order to 
 extrapolate the rate estimates on to the Pathfinder, which 
 does not have much collecting area and whose beam is quite large, one 
@@ -782,12 +792,16 @@ For a single-feed receiver, the FoV is given by
 $\sim \left(\frac{\lambda}{D}\right)^2$, which scales inversely with 
 collecting area, $A$. The thermal component depends linearly
 on forward gain and therefore collecting area. Combining these, 
-the rate is $\propto A^{-1} A^\alpha$, where $\alpha$ 
-is the FRB flux distribution's power-law index, which is 
+the rate is, 
+\begin{align}
+r_o &= \textrm{FoV} \times \left(\textrm{sensitivity}\right)^\alpha\\
+     & \propto A^{-1} A^\alpha,
+\end{align}
+where $\alpha$ is the FRB flux distribution's power-law index, which is 
 $3/2$ if FRBs are non-cosmological and Euclidean. If $\alpha < 1$, 
 as is expected in the cosmological FRB scenario, then 
 small telescopes are actually advantageous over large single-pixel telescopes 
-since the beamsize becomes more important. 
+since the beamsize becomes more important when $\alpha-1$ is negative. 
 
 With a dish like the Pathfinder
 we expect the rate to be 
@@ -796,6 +810,10 @@ compared to the Euclidean scenario. This is because its relatively
 low sensitivity per steradian requires there be large numbers 
 of very bright bursts, which one gets from a flat distribution.
 
+During the search 
+millisecond intensities can be written to disk.  
+We can therefore look for slow pulsars 
+and RRATS, since a significant fraction of the Galaxy transits each day.
 \subsection{False positives}
 
 Most transient searches are plagued by non-celestial sources masquerading 
@@ -895,6 +913,18 @@ ten percent.
      at very low DMs, near the minimum DM that is searched 
      (10 pc cm$^{-3}$). This makes it easy to differentiate truly 
      ``bright" events from high-signal-to-noise false positives.}
+\end{center}
+\end{figure}
+
+\begin{figure}[!h]
+\label{fig-scatterhist}
+\begin{center}
+\includegraphics[trim={0in 0in 0in 0in}, scale=0.65]
+{./figures/beamforming/alpha_limits.png}
+\vspace{0.0cm}
+\caption[abc]{Early limits on the flux distribution 
+     parameter $\alpha$ from the Pathfinder 
+     FRB search. }
 \end{center}
 \end{figure}
 
