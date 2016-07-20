@@ -144,7 +144,6 @@ Fig.~\ref{fig-bf_diagram} on page
 
 %trim={<left> <lower> <right> <upper>}
 \begin{figure}[!h]
-\label{fig-bf_diagram}
 \begin{center}
 \includegraphics[trim={1.in, 1.in, 2.5in, 1.in}, width=1\textwidth]{./figures/beamforming/beamforming_diagram.jpeg} 
 \vspace{0.0cm}
@@ -153,7 +152,8 @@ wavefront from a far-field point-source arrives at each antenna
 at different times, but the delay is calculable given an array 
 configuration and a direction to the object. Complex weights can 
 be applied to each antenna's voltage time-stream to account 
-for the geometric delay, allowing for the signals to be summed coherently.}  
+for the geometric delay, allowing for the signals to be summed coherently.}
+\label{fig-bf_diagram}  
 \vspace{-0.4cm}   
 \end{center}
 \end{figure}
@@ -320,7 +320,6 @@ Fig.~\ref{fig-fringestop}.
 % -------------------------------------------- FIGURE 1 --------------------------------------------
 
 \begin{figure}[!h]
-\label{fig-fringestop}
 \begin{center}
 \vspace{1cm}
 \includegraphics[trim={1in 0in 1in 1in}, width=\smwidth]{./figures/beamforming/thesis_fringestop.png}
@@ -341,6 +340,7 @@ Fig.~\ref{fig-fringestop}.
  the visibilities are not purely real; this is because there are residual 
  instrumental phases. These phases can be solved for using an 
  eigendecomposition now that the array is phased up to a single point-source.}  
+ \label{fig-fringestop}
 \end{center}
 \end{figure}
 
@@ -492,8 +492,8 @@ apparent paradox was solved by discovering \textit{two} sign
 reversals, one in the F-engine and one in the X-engine, that
 effectively cancel each other out, but only if both are applied. 
 
-Our digitizers sample at 800 MHz, taking advantage of the observing 
-band between 400-800 MHz being in the second Nyquist zone.
+Our digitizers sample at 800\,MHZ, taking advantage of the observing 
+band between 400-800\,MHZ being in the second Nyquist zone.
 However, when we channelize
 the incoming time-stream data in the FPGAs, the complex conjugation 
 associated with the aliased second Nyquist zone was not considered during the 
@@ -523,7 +523,6 @@ software.
 
 
 \begin{figure}[!h]
-\label{fig-bf_b0329}
 \begin{center}
 \includegraphics[trim={0.8in, 0in, 0in, 0in}, scale=0.5]{./figures/beamforming/b0329_testing.jpeg}
 %\vspace{0.0cm}
@@ -542,6 +541,7 @@ for the two polarizations autocorrelations. The difference between
 the east-west and north-south beams give an estimate for Stokes Q, which 
 includes both intrinsic polarization ($\sim10\%$ for this source)
 and instrumental leakage.} 
+\label{fig-bf_b0329}
 \vspace{0.4cm}   
 \end{center}
 \end{figure}
@@ -600,12 +600,11 @@ the necessary spatial resolution to locate the source
 within its galaxy. This is demonstrated in Fig.~\ref{fig-m51}.
 On top of this, we would not only detect a burst with 
 milli-arcsecond resolution, but it would also be the first source 
-in our band, at 400-800 MHz. We 
+in our band, at 400-800\,MHZ. We 
 would be writing baseband and therefore full-polarization information,
 which is not true of most FRBs.
 
 \begin{figure}[!h]
-\label{fig-m51}
 \begin{center}
 \includegraphics[trim={0in, 0in, 0in, 0in}, width=\textwidth]{./figures/beamforming/m51green.jpeg}
 \caption[abc]{A visual demonstration of the difference between 
@@ -614,12 +613,13 @@ which is not true of most FRBs.
      in a FRB VLBI effort.
      The image shows M51, which is about 20 kpc across, if it
      were at redshift 0.5. 2" resolution ($\sim$10$^5$ wavelengths, or $\sim$
-     50\,km at 600 MHz.) cannot distinguish between the 
+     50\,km at 600\,MHZ.) cannot distinguish between the 
      Galactic center and the edge of the disk. On the other hand,
      0.03" ($\sim$10$^7$ wavelengths)
      is the resolution of the 3,074\,km DRAO-ARO baseline,  
      which can localize the source well within the galaxy, even at 
      high redshifts.}  
+\label{fig-m51}
 \end{center}
 \end{figure}
 
@@ -638,6 +638,11 @@ thermal sensitivity. The Pathfinder would be an excellent
 tool to test this hypothesis, as a non-detection after multiple months 
 would call it into question. 
 
+Finally, during the search 
+millisecond intensities could be written to disk.  
+We can therefore look for slow pulsars 
+and RRATS, since a significant fraction of the 
+Galaxy transits each day.
 
 \subsection{Implementation}
 
@@ -677,19 +682,19 @@ on page \pageref{fig-bf_diagram}.
 \includegraphics[trim={1.in, 0in, 2.5in, 0in}, width=1\textwidth]{./figures/beamforming/moose_diagram.png} 
 %\vspace{0.0cm}
 \caption[abc]{Block diagram of the beamforming back-end on CHIME Pathfinder. 
-A calibration solution is obtained from a bright point-source transit, 
-the phases of which are fed into the FPGAs where they are applied as a 
-digital gain. All antenna signals are then sent the $X$-engine, 
-comprised of 16 GPU nodes. Each node applies geometric phases then 
-sums the voltage stream across all antennas with the same polarization. 
-The two resultant beams are then sent to our acquisition machine {\tt moose} 
-as {\tt VDIF} packets, where a multi-threaded capture code, {\tt ch\_vdif\_assembler}. 
-At this point the baseband data are either written to disk as scrambled baseband 
-{\tt VDIF}, or they are reorganized in time and frequency. The ordered data are 
-searched for FRBs after squaring and integrating to $\sim$millisecond cadence 
-using a tree-dedispersion algorithm. If there is a trigger, then the corresponding 
-baseband data is hard-linked. Old files that haven't been hard-linked are deleted
-periodically.}
+     A calibration solution is obtained from a bright point-source transit, 
+     the phases of which are fed into the FPGAs where they are applied as a 
+     digital gain. All antenna signals are then sent the $X$-engine, 
+     comprised of 16 GPU nodes. Each node applies geometric phases then 
+     sums the voltage stream across all antennas with the same polarization. 
+     The two resultant beams are then sent to our acquisition machine {\tt moose} 
+     as {\tt VDIF} packets, where a multi-threaded capture code, {\tt ch\_vdif\_assembler}. 
+     At this point the baseband data are either written to disk as scrambled baseband 
+     {\tt VDIF}, or they are reorganized in time and frequency. The ordered data are 
+     searched for FRBs after squaring and integrating to $\sim$millisecond cadence 
+     using a tree-dedispersion algorithm. If there is a trigger, then the corresponding 
+     baseband data is hard-linked. Old files that haven't been hard-linked are deleted
+     periodically.}
 \end{center}
 \end{figure}
 
@@ -716,7 +721,6 @@ overlapping with the previous one by 18 seconds.
 
 
 \begin{figure}[!h]
-\label{fig-b0329_trigger}
 \begin{center}
 \includegraphics[trim={0in, 0in, 0in, 0in}, scale=0.75]{./figures/beamforming/b0329_trigger.png}
 \caption[abc]{Example of a figure created after a trigger 
@@ -738,6 +742,7 @@ vs. time colour map showing the dedispersed pulse. \textit{Third panel:}
 Pulse profile for this trigger, averaged over frequency after 
 masking RFI and weighting by inverse system temperature. \textit{Bottom panel:}
 Fluence vs. frequency plot of the pulse.}  
+\label{fig-b0329_trigger}
 \vspace{0.4cm}   
 \end{center}
 \end{figure}
@@ -760,24 +765,24 @@ back-end is outlined in Fig.~\ref{fig-aro_diagram}.
 
 
 \begin{figure}[!h]
-\label{fig-aro_diagram}
 \begin{center}
 \includegraphics[trim={0in, 0in, 0in, 0in}, width=\textwidth]{./figures/beamforming/aro_diagram.jpeg}
 \caption[abc]{This figure shows a block diagram of the basic 
-     FRB search setup at ARO. A single 16-channel FPGA
+     FRB search set-up at ARO. A single 16-channel FPGA
      channelizes the 800 Ms/s data and sends 1024 frequencies 
      to an acquisition node, {\tt squirrel}, at a cadence of 2.56 $\mu$s.
      Those data are squared, summed, and dumped to a RAM disk, 
      where it is searched for FRBs between 10-2000 pc cm$^{-3}$.}
 \vspace{0.4cm}   
+\label{fig-aro_diagram}
 \end{center}
 \end{figure}
 
 \subsection{Results}
 
-\subsection{A flat brightness distribution?}
+\subsubsection{A flat brightness distribution?}
 As we discuss in chapter \ref{chapter:frb_statistics}, there is 
-a large uncertainty in the FRB rate between 400-800 MHz. There 
+a large uncertainty in the FRB rate between 400-800\,MHZ. There 
 is even greater uncertainty in the expected rate for a 
 telescope like the CHIME Pathfinder. This is because at this time
 all FRBs
@@ -785,7 +790,7 @@ have been detected with large collecting area, highly sensitive single-dish
 telescopes (GBT, Parkes, and Arecibo). Therefore in order to 
 extrapolate the rate estimates on to the Pathfinder, which 
 does not have much collecting area and whose beam is quite large, one 
-needs to know the underlying flux distribution. As we will show 
+needs to know the underlying brightness distribution. As we will show 
 in Chapter \ref{chapter:frb_statistics}, the rate depends on the product 
 of the telescope's field-of-view (FoV) and a thermal sensitivity term. 
 For a single-feed receiver, the FoV is given by 
@@ -804,17 +809,73 @@ small telescopes are actually advantageous over large single-pixel telescopes
 since the beamsize becomes more important when $\alpha-1$ is negative. 
 
 With a dish like the Pathfinder
-we expect the rate to be 
+we expect the detection rate to be 
 roughly 10 times higher if $\alpha\approx 0.8$ (cosmological scenario) 
-compared to the Euclidean scenario. This is because its relatively 
+compared to the Euclidean case. This is because its relatively 
 low sensitivity per steradian requires there be large numbers 
 of very bright bursts, which one gets from a flat distribution.
+Using non-detection in $\sim$2 months of observing, we can 
+estimate the values of $\alpha$ that are excluded 
+by calculating the Poissonian probability of seeing zero 
+given some expected value. As a simple model, assume
+the probability of seeing $M$ events given some expected 
+number of events $\mu$. Then,
 
-During the search 
-millisecond intensities can be written to disk.  
-We can therefore look for slow pulsars 
-and RRATS, since a significant fraction of the Galaxy transits each day.
-\subsection{False positives}
+\begin{equation}
+     P(M | \alpha, \mu) = \frac{\mu^M e^{-\mu}}{M!}
+\end{equation}
+
+\noindent where $\mu$ can be calculated by extrapolating 
+from other surveys in which FRBs have been seen.  
+If we take the Pathfinder daily rate estimated in 
+\citep{2016MNRAS.460.1054C} and presented in 
+Chapter \ref{chapter:frb_statistics} and multiply it by 
+the number of days on sky, we can calculate a $p$-value
+as a function of $\alpha$. This is just given by 
+$P(0 | \alpha, \mu) = e^{-\mu}$ and it plotted in 
+Fig.~\ref{fig-pf_alpha}. We find that $\alpha < 0.61$
+can be ruled out with 95\% confidence. This is 
+based on the Pathfinder sensitivity estimates we use in Chapter 
+\ref{chatper:frb_statistics}, with $T_{\rm sys}=50$\,K,
+only 100\,MHz of bandwidth (for reasons we will 
+discuss), and a S/N threshold of 9$\sigma$. The 
+dashed line on the right edge of the blue 
+contour gives the probability of seeing 
+zero FRBs in 45 days of observing, assuming the 
+2$\sigma$ upper-limit on the FRB rate in our band. The 
+left edge uses the lower-bound on the rate, which is why 
+seeing no events is quite likely, even when the 
+spectrum is quite flat.
+
+
+
+\begin{figure}[!h]
+\begin{center}
+\includegraphics[trim={0in 0in 0in 0in}, scale=0.65]
+{./figures/beamforming/alpha_limits.png}
+\vspace{-.4cm}
+\caption[abc]{Early limits on the brightness distribution 
+     parameter $\alpha$ from the Pathfinder 
+     FRB search. The $y$-axis shows the Poissonian 
+     probability of seeing zero events assuming 
+     some $\alpha$ and an expected value based on the 
+     Pathfinder rate in \citep{2016MNRAS.460.1054C}, 
+     with 45 days of observing. The rate, and therefore the 
+     expected number of detected bursts, is highly uncertain,
+     which is why the blue region is so wide.
+     The salmon curve shows the probability if we assume the 
+     central value of $\mu$ predicted by \citet{2016MNRAS.460.1054C}, 
+     and the dashed lines represent 
+     the 2$\sigma$ bounds. The grey shaded region at the bottom 
+     of the figure shows the region that is ruled out 
+     with 95\% confidence. Assuming the salmon curve, 
+     then $\alpha < 0.61$ is ruled out.}
+\label{fig-pf_alpha}
+\end{center}
+\end{figure}
+
+
+\subsubsection{False positives}
 
 Most transient searches are plagued by non-celestial sources masquerading 
 as astronomical events. 
@@ -833,9 +894,9 @@ At DRAO, although the region is officially
 protected from radio contamination, about 15$\%$ of the CHIME
 band is presently lost to RFI (see the bottom left 
 panel of Fig.~\ref{fig-lte_trigger}). Recently, Rogers Communications 
-paid several billion Canadian dollars for a 700 MHz 
+paid several billion Canadian dollars for a 700\,MHZ 
 Long-Term Evolution (LTE) band for cellphone service.
-Unlike the satellite television stations that we see at 500-600 MHz, 
+Unlike the satellite television stations that we see at 500-600\,MHZ, 
 the LTE band fluctuates on timescales of milliseconds to seconds, 
 which can affect a millisecond transient search. 
 Fig.~\ref{fig-lte_trigger} shows an example of this RFI false 
@@ -844,18 +905,18 @@ positive from the LTE band.
 
 %trim={<left> <lower> <right> <upper>}
 \begin{figure}[!h]
-\label{fig-lte_trigger}
 \begin{center}
 \includegraphics[trim={0in 0in 0in 0in}, scale=0.5]
 {./figures/beamforming/lte_trigger.png}
 \vspace{0.0cm}
 \caption[abc]{A false positive trigger caused by the flickering 
-LTE band that, the likes of which 
-caused $\sim$90$\%$ of the alerts before it was removed.
-It is of course simple to reject; one can just mask 
-out the relevant channels.
-However, it provides a useful example of the types of 
-short-timescale RFI that can affect an FRB survey.}
+     LTE band that, the likes of which 
+     caused $\sim$90$\%$ of the alerts before it was removed.
+     It is of course simple to reject; one can just mask 
+     out the relevant channels.
+     However, it provides a useful example of the types of 
+     short-timescale RFI that can affect an FRB survey.}
+\label{fig-lte_trigger}
 \end{center}
 \end{figure}
 
@@ -897,7 +958,6 @@ to 9$\sigma$ one only decreases the survey speed by of order
 ten percent. 
 
 \begin{figure}[!h]
-\label{fig-scatterhist}
 \begin{center}
 \includegraphics[trim={0in 0in 0in 0in}, scale=0.5]
 {./figures/beamforming/dm_dist_falsepositives.png}
@@ -914,18 +974,7 @@ ten percent.
      (10 pc cm$^{-3}$). This makes it easy to differentiate truly 
      ``bright" events from high-signal-to-noise false positives.}
 \end{center}
-\end{figure}
-
-\begin{figure}[!h]
 \label{fig-scatterhist}
-\begin{center}
-\includegraphics[trim={0in 0in 0in 0in}, scale=0.65]
-{./figures/beamforming/alpha_limits.png}
-\vspace{0.0cm}
-\caption[abc]{Early limits on the flux distribution 
-     parameter $\alpha$ from the Pathfinder 
-     FRB search. }
-\end{center}
 \end{figure}
 
 \section{Conclusion}
@@ -948,7 +997,7 @@ a step which is vital to beamforming.
 The CHIME Pathfinder now has a stable beamforming back-end
 that runs in parallel with the full-$N^2$ cosmology acquisition.
 The back-end provides us with a tracking synthetic beam that 
-dumps baseband data to disk with 1024 391 kHz channels at 
+dumps baseband data to disk with 1024 391\,kHz channels at 
 2.56 microseconds. We have outlined the commissioning of this 
 back-end, including the first coherent pulsar observations on CHIME.
 
@@ -964,9 +1013,23 @@ flux distribution than a more local population, which
 will obey $N(>S)\propto S^{-1.5}$. The cosmological hypothesis implies that 
 there exists surplus of ultra-bright bursts that could be 
 seen by a relatively insensitive instrument like that Pathfinder.
-We found that with 
+We found that with 45\,days on-sky and using conservative 
+estimates for the telescope's sensitivity, we can rule 
+out $\alpha < 0.61$ with 95\% confidence. 
 
-The ARO 
+The ARO FRB search, which will complete the 3$\times$10$^3$\,km
+baseline, was described. It has a similar set-up to the 
+system at DRAO, except with reduced computational 
+complexity: each packet contains all 1024 contiguous 
+packets. Once ARO is running its search, the S/N threshold 
+there and on the CHIME Pathfinder search will be decreased
+to allow for coincident detection. If both locations 
+trigger with the same DM at the same time, baseband voltage 
+data will be written to disk and the telescopes 
+will be correlated against each other. This could 
+allow for several sub-milli-arcsecond FRB detections 
+per year.
+
 
 
 % ================================================================================
