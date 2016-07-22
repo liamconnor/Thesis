@@ -71,7 +71,46 @@
 % ----------------------------------------------------------------------------------------------------------------------------------------
 
 \begin{abstract} % At most 350 words for Ph.D.
-
+The time-variable long-wavelength sky harbours a 
+number of known but unsolved astrophysical problems, 
+as well as undiscovered phenomena. 
+With modern tools such problems will become tractable, 
+and new classes of astronomical objects will be revealed.
+These tools include digital radio telescopes made from 
+powerful computing clusters, improved data analytics and 
+statistical inference, and theoretical tools. In this 
+thesis we employ all of these tools to understand better 
+several puzzles in the time-domain radio sky. Our primary 
+focus is on the mystery of fast radio bursts (FRBs), a 
+new class of transients of which there seem to be 
+thousands per sky per day. We offer a model in which 
+FRBs are extragalactic but non-cosmological pulsars 
+in very young supernova remnants. Since this theoretical 
+work was done, several lines of observational evidence 
+have corroborated the picture of FRBs as young rotating neutron 
+stars, including the non-Poissonian repetition of FRB 121102.
+We also present statistical arguments regarding the nature 
+and location of the bursts. These include reinstituting 
+the classic $V/V_{\rm max}$-test to measure the brightness 
+distribution of FRBs, i.e., constraining  
+$\frac{\partial \log N}{\partial \log S}$.
+We find consistency with a Euclidean distribution, meaning 
+current observations cannot distinguish between 
+a cosmological population and a more local uniform 
+population, unless added assumptions are made. We 
+also showed that the rate of FRBs below L-band is consistent
+with the rate at 1.4\,GHz, which is promising for upcoming 
+high-impact experiments. One of these is 
+the Canadian Hydrogen Intensity Mapping Experiment (CHIME).
+We outline this instrument and describe the creation 
+of a digital beamforming back-end on its Pathfinder. 
+We also discuss the commissioning of a real-time VLBI 
+FRB search between it and the Algonquin Radio Observatory (ARO)
+46\,m telescope. This includes results from the first couple of
+months of Pathfinder data. Finally, we present a study of 
+the microstructure in pulsar B0329+54's individual pulses 
+in full-polarization and present results on the quasi-periodic 
+structure seen in almost all pulses. 
 \end{abstract}
 
 % Anything placed between the abstract and table of contents will appear on a separate page since the 
@@ -97,43 +136,43 @@
 % ACKNOWLEDGEMENTS
 % ----------------------------------------------------------------------------------------------------------------------------------------
 
-% \begin{acknowledgements}
-%    The research presented in this thesis samples the work 
-%    I have done over the last five years, which has 
-%    ranged from what felt like mathematical musings to software development  
-%    to on-site hardware work. This is because both of my supervisors, 
-%    Ue-Li Pen and Keith Vanderlinde, possess end-to-end knowledge 
-%    and understanding that has at times left me awe-stricken; 
-%    needless to say this thesis would not have been possible without them. 
-%    A similarly insightful supervisory figure was Richard Shaw, 
-%    whose ease with signal processing, statistics, and computing 
-%    was greatly appreciated in my first couple years of graduate school. 
-%    On the CHIME team, I was lucky enough to work closely 
-%    with such world-class experimental cosmologists as Mark Halpern 
-%    and Gary Hinshaw. Tom Landecker was an irreplaceable source 
-%    of knowledge and wisdom during my many 
-%    visits to DRAO, acting as the token radio astronomer in a 
-%    large radio astronomy project. I also thank the members of my 
-%    thesis committee, including Mike Reid and Barth Netterfield. 
-%    To the four other remaining Ph.D. candidates in my year,
-%    Heidi, Lauren, Max, and Stephen, it's been a pleasure. I'll 
-%    never forget moving into the astro library with you guys 
-%    in order to sweat over quals. To my external friends, Malcolm,
-%    Geoff, NELLA, Tom, Riley, Pete, and Nick, I appreciate the tacit 
-%    support and your expertly feigned disinterest in the particulars 
-%    of my research. It allowed for much-needed compartmentalization 
-%    and enabled me to genuinely enjoy my mid-twenties in Toronto. 
-%    Layla, thank you for grounding me and expanding my world.
-%    Finally, I thank my family. Mom and dad, the goodness of your 
-%    parenting precluded me from 
-%    making a career in painting, poetry, or literature, since I 
-%    would have no right to claim myself a tortured artist. Pop, 
-%    your intellectual curiosity and sense of humour 
-%    at the age of (at the time of this writing) ninety one, 
-%    is truly inspiring. Alastair, Reegan, and Sophie, thank you 
-%    as well for the support over these last five years.
+\begin{acknowledgements}
+   The research presented in this thesis samples the work 
+   I have done over the last five years, which has 
+   ranged from what felt like mathematical musings to software development  
+   to on-site hardware work. This is because both of my supervisors, 
+   Ue-Li Pen and Keith Vanderlinde, possess end-to-end knowledge 
+   and understanding that has at times left me awe-stricken; 
+   needless to say this thesis would not have been possible without them. 
+   A similarly insightful supervisory figure was Richard Shaw, 
+   whose ease with signal processing, statistics, and computing 
+   was greatly appreciated in my first couple years of graduate school. 
+   On the CHIME team, I was lucky enough to work closely 
+   with such world-class experimental cosmologists as Mark Halpern 
+   and Gary Hinshaw. Tom Landecker was an irreplaceable source 
+   of knowledge and wisdom during my many 
+   visits to DRAO, acting as the token radio astronomer in a 
+   large radio astronomy project. I also thank the members of my 
+   thesis committee, including Mike Reid and Barth Netterfield. 
+   To the four other remaining Ph.D. candidates in my year,
+   Heidi, Lauren, Max, and Stephen, it's been a pleasure. I'll 
+   never forget moving into the astro library with you guys 
+   in order to sweat over quals. To my external friends, Malcolm,
+   Geoff, NELLA, Tom, Riley, Pete, and Nick, I appreciate the tacit 
+   support and your expertly feigned disinterest in the particulars 
+   of my research. It allowed for much-needed compartmentalization 
+   and enabled me to genuinely enjoy my mid-twenties in Toronto. 
+   Layla, thank you for grounding me and expanding my world.
+   Finally, I thank my family. Mom and dad, the goodness of your 
+   parenting precluded me from 
+   making a career in painting, poetry, or literature, since I 
+   would have no right to claim myself a tortured artist. Pop, 
+   your intellectual curiosity and sense of humour 
+   at the age of (at the time of this writing) ninety one, 
+   is truly inspiring. Alastair, Reegan, and Sophie, thank you 
+   as well for the support over these last five years.
 
-% \end{acknowledgements}
+\end{acknowledgements}
 
 % ----------------------------------------------------------------------------------------------------------------------------------------
 % TABLE OF CONTENTS
@@ -174,12 +213,12 @@
 % clean up that section in general
 % -- Change units to \, m from " m "
 
-% \include{./sections/introduction}
-% \include{./sections/chime}
-% \include{./sections/beamforming}
-% \include{./sections/frb_modelling}
+\include{./sections/introduction}
+\include{./sections/chime}
+\include{./sections/beamforming}
+\include{./sections/frb_modelling}
 \include{./sections/frb_statistics}
-% \include{./sections/microstructure}
+\include{./sections/microstructure}
 \include{./sections/conclusions}
 
 % ==============================================================================
