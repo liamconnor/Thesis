@@ -25,8 +25,8 @@ the DRAO and ARO will be outlined, starting with a real-time
 24/7 transient search on the Pathfinder's synthetic beam. We discuss early 
 results, including the false-positive rate and distribution, as 
 well as the implications of a non-detection on the FRB brightness 
-distribution, $N(S)$. We exclude $\alpha < 0.6$ with 95\% confidence, 
-which provides a new lower-bound on that parameter. 
+distribution, $N(S)$. We exclude $\alpha < 0.43$ with 95\% confidence, 
+assuming the Pathfinder rate estimate in \citet{2016MNRAS.460.1054C}.
 % ================================================================================
 % INTRODUCTION
 % ================================================================================
@@ -99,8 +99,8 @@ Sect.~\ref{vlbi_frb}. We can write this explicitly as follows,
      ..., \, x_N(\rm{t}, \nu) \right ).
 \end{align}
 
-The voltage stream, $X_{\rm BF}$, is then effectively squared and integrated 
-to give a visibility stream. 
+The voltage stream, $X_{\rm BF}$, is then effectively correlated and integrated 
+to give an intensity stream. 
 In the case of CHIME, $X_{\rm BF}$ corresponds to a single polarization 
 so to get the full Stokes information one must compute the 
 north-south polarization's autocorrelation, the east-west autocorrelation, 
@@ -155,7 +155,7 @@ configuration and a direction to the object. Complex weights can
 be applied to each antenna's voltage time-stream to account 
 for the geometric delay, allowing for the signals to be summed coherently.}
 \label{fig-bf_diagram}  
-\vspace{-0.4cm}   
+\vspace{-0cm}   
 \end{center}
 \end{figure}
 
@@ -175,7 +175,7 @@ We use the standard interferometric $(u, v, w)$ coordinate system
 to describe our baseline vector, $\mathbf{d}_n$. This is a 
 right-handed coordinate system where $u$ (east-west) and $v$ (north-south) are in the plane 
 whose normal is the zenith, and $w$ measures the vertical direction \citep{1986isra.book.....T}.
-They are defined in numbers of wavelengths, with
+They are defined in units of wavelengths, with
 $u = d_{\rm ew} / \lambda$, $v = d_{\rm ns} / \lambda$, 
 and $w = d_{\rm vert} / \lambda$. Eq.~\ref{eqn-phi_n} can be expanded 
 as,
@@ -236,7 +236,7 @@ the wavefront's differential time-of-arrival across at array
 is the same time delay seen by the correlator. In fact each 
 signal is further delayed by multiple steps in the signal chain, 
 often randomly. 
-Digital phases in the electronics can be added by the LNAs and FLAs; 
+Analog phases in the electronics can be added by the LNAs and FLAs; 
 coaxial cables, whose lengths vary by up to a meter, can rotate 
 the signal by multiple radians. Therefore in order to coherently sum 
 across the array and beamform, the instrumental phases must be removed. 
@@ -327,7 +327,7 @@ Fig.~\ref{fig-fringestop}.
 \caption[abc]{An example of the fringestopping process that is 
  necessary for gain calibration off of a transiting point-source. Since 
  the phase of a visibility will have a time- and frequency-dependent 
- component, the measured correlation will fringe as the earth rotates in 
+ component, the measured correlation will fringe as the earth rotates, in 
  a chromatic way. This effect can be removed by multiplying each visibility by 
  $e^{-i \phi_{m, n}(\rm t, \nu)}$, as determined by Eq.~\ref{eq-fringestop_phase}. 
  The top left panel shows the raw correlation between feeds 1 and 129 as a function of transiting
@@ -337,7 +337,7 @@ Fig.~\ref{fig-fringestop}.
  data before fringestopping, where the top panel 
  is the complex visibility and the bottom panel is its corresponding
  phase. The slope, or fringe-rate, decreases 
- at lower frequencies, as expected. The right panel show the same data 
+ at lower frequencies, as expected. The right panels show the same data 
  after running it through the fringestopping pipeline. Though the resulting 
  phases are near flat, implying that the baseline is no long fringeing, 
  the visibilities are not purely real; this is because there are residual 
@@ -477,7 +477,7 @@ phases in real-time in order to track sources during a transit, and deliberately
 switching the weights with their conjugate to see if the fringe 
 direction changed. Through these tests several bugs were discovered, 
 such as spherical trigonometry errors in the phase 
-calculations and a disagreement between one piece of code's 
+calculations and a disagreement between two pieces of code's 
 definition of $LST$. 
 
 The final hurdle was more fundamental to CHIME's architecture,
@@ -547,7 +547,7 @@ vs. phase Stokes I, integrated over roughly 15 minutes.
 for the two polarizations' autocorrelations. The difference between 
 the east-west and north-south beams give an estimate for Stokes Q, which 
 includes both intrinsic polarization ($\sim10\%$ for this source)
-and instrumental leakage.} 
+and instrumental cross-pol.}
 \label{fig-bf_b0329}
 \vspace{0.4cm}   
 \end{center}
@@ -671,7 +671,8 @@ were added that allow not only long-term beamforming captures,
 but also transient searching. 
  
 A real-time, multithreaded acquisition code that takes in the VDIF 
-packets coming out of the X-engine, and rearranges them to either be written to disk or search for 
+packets coming out of the X-engine, and rearranges them to either 
+be written to disk or to search for 
 FRBs\footnote{https://github.com/kmsmith137/ch\_vdif\_assembler}. Attached 
 to this packet reader was a tree-dedispersion search code, some of 
 which had been used before on Green Bank 100\,m data and a real-time ARO 
@@ -695,7 +696,7 @@ on page \pageref{fig-bf_diagram}.
      A calibration solution is obtained from a bright point-source transit, 
      the phases of which are fed into the FPGAs where they are applied as a 
      digital gain. All antenna signals are then sent to the X-engine, 
-     comprised of 16 GPU nodes. Each node received 64 frequency channels,
+     comprised of 16 GPU nodes. Each node receives 64 frequency channels,
      applies geometric phases, then 
      sums the voltage stream across all antennas with the same polarization. 
      The two resultant beams are then sent to our acquisition machine {\tt moose} 
@@ -719,12 +720,12 @@ to park the beam. As a sanity check, we have spent roughly
 half the time pointed 
 at the declination of pulsar B0329+54, which is the 
 brightest switching source in the northern sky in our band. It 
-is dispersed with 26.833 pc cm$^{-3}$ and its individual 
+is dispersed with 26.833\,pc\,cm$^{-3}$ and its individual 
 pulses are bright enough to detect, meaning our tree-dedispersion 
 algorithm ought to find its individual pulses every 
 time it transits. The search 
 algorithm looks at time blocks of 100 seconds, searches 
-for DMs between 10-2000 pc cm$^{-3}$ with widths between 
+for DMs between 10-2000\,pc\,cm$^{-3}$ with widths between 
 1-100 ms, and nominally looks for peaks above 8$\sigma$. If it finds something
 it ``triggers'' and writes out an image file containing the peak 
 in DM / arrival time space, a dedispersed waterfall plot, a dedispersed 
@@ -750,7 +751,7 @@ is of order 10 Jy, so this pulse might be half as bright
 as the original Lorimer burst \citep{lorimer-2007}. 
 \textit{Top panel:} The search results 
 in dispersion measure vs. arrival time space. The red, butterfly-like 
-cluster of points around DM of 25 pc cm$^{-3}$ and arrival time 
+cluster of points around DM of 25\,pc\,cm$^{-3}$ and arrival time 
 6 seconds into the 100 second block, 
 shows the detection of a single B0329+54 pulse. 
 \textit{Second panel:} A frequency 
@@ -791,7 +792,7 @@ back-end is outlined in Fig.~\ref{fig-aro_diagram}.
      channelizes the 800 MSps data and sends 1024 frequencies 
      to an acquisition node, {\tt squirrel}, at a cadence of 2.56 $\mu$s.
      Those data are squared, summed, and dumped to a RAM disk, 
-     where it is searched for FRBs between 10-2000 pc cm$^{-3}$.}
+     where they are searched for FRBs between DM$=$10-2000\,pc\,cm$^{-3}$.}
 \vspace{0.4cm}   
 \label{fig-aro_diagram}
 \end{center}
@@ -896,7 +897,7 @@ ten percent.
      DM vs. signal-to-noise for the same set of triggers. The 
      high-significance tail in the histogram seem to all be clustered 
      at very low DMs, near the minimum DM that is searched 
-     (10 pc cm$^{-3}$). This makes it easy to differentiate truly 
+     (10\,pc\,cm$^{-3}$). This makes it easy to differentiate truly 
      ``bright" events from high-signal-to-noise false positives.}
 \end{center}
 \label{fig-scatterhist}
@@ -956,21 +957,63 @@ Chapter \ref{chapter:frb_statistics} and multiply it by
 the number of days on sky, we can calculate a $p$-value
 as a function of $\alpha$. This is just given by 
 $P(0 | \alpha, \mu) = e^{-\mu}$ and is plotted in 
-Fig.~\ref{fig-pf_alpha}. We find that $\alpha < 0.61$
-can be ruled out with 95\% confidence. This is 
+Fig.~\ref{fig-pf_alpha}. This is 
 based on the Pathfinder sensitivity estimates we will use in Chapter 
-\ref{chatper:frb_statistics}, with $T_{\rm sys}=50$\,K,
+\ref{chapter:frb_statistics}, with $T_{\rm sys}=50$\,K,
 100\,MHz of bandwidth (for reasons we will 
-discuss), and a S/N threshold of 9$\sigma$. The 
-dashed line on the right edge of the blue 
+discuss), and a S/N threshold of 9$\sigma$. 
+
+Our Pathfinder sensitivity estimates in \citet{2016MNRAS.460.1054C} 
+used an assumption of high spectral resolution.
+Though we are in the process of developing the ability 
+to upchannelize our data to 16384 frequency channels 
+from 1024, this search was carried out with the standard 390\,kHz
+resolution. This leads to ``DM smearing", which broadens 
+the pulse and reduces S/N. If the FRB's intrinsic width 
+is $t_i$, is sampled at $t_{\rm samp}$, and is scattered to a width $\tau$, 
+the minimum flux to which we are sensitive is 
+increased as,
+
+\begin{equation}
+S'_{\textrm{min}} \rightarrow S_{\textrm{min}} \times \frac{t_I}{\sqrt{\tau^2 + t^2_i}},
+\label{eqn:sens_smear}
+\end{equation}
+
+\noindent where $t_I$ is the final pulse width
+\citep{2014ApJ...792...19B}. 
+Using $\Delta \nu$ as the frequency 
+resolution in MHz, and $\nu_c$ as the central frequency in GHz, 
+the effective pulse width can be calculated by 
+adding in quadrature the other broadening elements.
+This is done as follows,
+
+\begin{equation}
+t^2_I = \tau^2 + t^2_i + t^2_{\textrm{samp}} \left ( \frac{8.3\, \textrm{DM} \,
+\Delta \nu}{\nu^3_c} \right )^2 \, \mu\rm s.
+\label{eqn:smearing}
+\end{equation}
+
+In our current set up on the Pathfinder, the smearing term 
+dominates at high DM. For example, a burst with DM=700\,pc\,cm$^{-3}$
+that was intrinsically 1\,ms, sampled at 1\,ms, and scattered to 
+3\,ms (roughly the case for GBT FRB 110523), would be $\sim$11\,ms
+in duration if observed on the Pathfinder. Therefore if all FRBs
+had the parameters of that hypothetical 
+burst, Eq.~\ref{eqn:sens_smear} tells us that 
+the current Pathfinder search would be $\sim3.5^\alpha$ times 
+slower than an upchannelized Pathfinder search.
+
+We include this effect in our estimates in Fig.~\ref{fig-pf_alpha}. 
+We find that $\alpha < 0.43$
+can be ruled out with 95\% confidence.
+The dashed line on the right edge of the blue 
 contour gives the probability of seeing 
 zero FRBs in 45 days of observing, assuming the 
-2$\sigma$ upper-limit on the FRB rate in our band. The 
+2$\sigma$ upper-limit on the FRB rate in our band
+from \citep{2016MNRAS.460.1054C}. The 
 left edge uses the lower-bound on the rate, which is why 
 seeing no events is quite likely, even when the 
 spectrum is quite flat.
-
-
 
 \begin{figure}[!h]
 \begin{center}
@@ -982,7 +1025,7 @@ spectrum is quite flat.
      FRB search. The $y$-axis shows the Poissonian 
      probability of seeing zero events assuming 
      some $\alpha$ and an expected value based on the 
-     Pathfinder rate in \citep{2016MNRAS.460.1054C}, 
+     Pathfinder rate in \citet{2016MNRAS.460.1054C}, 
      with 45 days of observing. The rate, and therefore the 
      expected number of detected bursts, is highly uncertain,
      which is why the blue region is so wide.
@@ -992,7 +1035,7 @@ spectrum is quite flat.
      the 2$\sigma$ bounds. The grey shaded region at the bottom 
      of the figure shows the region that is ruled out 
      with 95\% confidence. Assuming the salmon curve, 
-     then $\alpha < 0.61$ is ruled out.}
+     then $\alpha < 0.43$ is ruled out.}
 \label{fig-pf_alpha}
 \end{center}
 \end{figure}
@@ -1017,8 +1060,8 @@ a step which is vital to beamforming.
 The CHIME Pathfinder now has a stable beamforming back-end
 that runs in parallel with the full-$N^2$ cosmology acquisition.
 The back-end provides us with a tracking synthetic beam that 
-dumps baseband data to disk with 1024 391\,kHz channels at 
-2.56 microseconds. We have outlined the commissioning of this 
+dumps baseband data to disk with 1024$times$391\,kHz channels 
+after sampling at 1.25\,ns. We have outlined the commissioning of this 
 back-end, including the first coherent pulsar observations on CHIME.
 
 We have also described a new project to localize FRBs with 
@@ -1035,7 +1078,7 @@ there exists surplus of ultra-bright bursts that could be
 seen by a relatively insensitive instrument like that Pathfinder.
 We found that with 45\,days on-sky and using conservative 
 estimates for the telescope's sensitivity, we can rule 
-out $\alpha < 0.61$ with 95\% confidence. 
+out $\alpha < 0.43$ with 95\% confidence. 
 
 The ARO FRB search, which will complete the 3$\times$10$^3$\,km
 baseline, was described. It has a similar set-up to the 
