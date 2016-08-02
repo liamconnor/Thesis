@@ -1,5 +1,7 @@
 \documentclass[12pt]{ut-thesis}
 
+\usepackage[utf8]{inputenc}
+
 % ----------------------------------------------------------------------------------------------------------------------------------------
 % USEPACKAGE DECLARATIONS
 % ----------------------------------------------------------------------------------------------------------------------------------------
@@ -19,14 +21,15 @@
 \usepackage{capt-of}
 \usepackage{setspace}
 \usepackage{mathrsfs}
+\usepackage{glossaries}
 \doublespacing 
-
 
 %\usepackage[figuresleft]{rotating}
 
 % ----------------------------------------------------------------------------------------------------------------------------------------
 % AUTHOR INFORMATION
 % ----------------------------------------------------------------------------------------------------------------------------------------
+
 
 \degree{Doctor of Philosophy}
 \department{Astronomy and Astrophysics}
@@ -49,6 +52,7 @@
 % Make each page fill up the entire page.
 \flushbottom
 
+
 % ==============================================================================
 % PRELIMINARY CONTENT
 % ==============================================================================
@@ -57,6 +61,12 @@
 
 % This sets the page style and numbering for preliminary sections.
 \begin{preliminary}
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Glossary}
+\glossarystyle{super}
+\printglossary[title='Glossary']
 
 % This generates the title page from the information given above.
 \maketitle
@@ -118,8 +128,8 @@ synthetic beam and the Algonquin Radio Observatory (ARO)
 46\,m telescope. This includes results from the first couple of
 months on sky. Finally, we present a study of 
 the microstructure in pulsar B0329+54's individual pulses 
-in full-polarization and present results on the quasi-periodic 
-structure seen in almost all pulses. 
+in full-polarization and present results on its quasi-periodic 
+structure. 
 \end{abstract}
 
 % Anything placed between the abstract and table of contents will appear on a separate page since the 
@@ -130,13 +140,13 @@ structure seen in almost all pulses.
 % DEDICATION
 % ----------------------------------------------------------------------------------------------------------------------------------------
 
-%\begin{dedication}
+\begin{dedication}
 \vspace*{\fill}
 \begin{center}
 {\em|}% To Pop and my infinitely supportive parents}
 \end{center}
 \vfill
-%\end{dedication}
+\end{dedication}
 
 \newpage % Force separate pages for dedication and acknowledgements
 
@@ -224,13 +234,13 @@ structure seen in almost all pulses.
 
 %\newglossaryentry{a}{b}
 
-% \include{./sections/introduction}
-% \include{./sections/chime}
-% \include{./sections/beamforming}
-% \include{./sections/frb_modelling}
-% \include{./sections/frb_statistics}
+\include{./sections/introduction}
+\include{./sections/chime}
+\include{./sections/beamforming}
+\include{./sections/frb_modelling}
+\include{./sections/frb_statistics}
 \include{./sections/microstructure}
-% \include{./sections/conclusions}
+\include{./sections/conclusions}
 
 % ==============================================================================
 % BIBLIOGRAPHY
