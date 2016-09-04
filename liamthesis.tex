@@ -1,7 +1,5 @@
 \documentclass[12pt]{ut-thesis}
 
-\usepackage[utf8]{inputenc}
-
 % ----------------------------------------------------------------------------------------------------------------------------------------
 % USEPACKAGE DECLARATIONS
 % ----------------------------------------------------------------------------------------------------------------------------------------
@@ -21,7 +19,7 @@
 \usepackage{capt-of}
 \usepackage{setspace}
 \usepackage{mathrsfs}
-\usepackage{glossaries}
+%\usepackage{glossaries}
 \doublespacing 
 
 %\usepackage[figuresleft]{rotating}
@@ -35,8 +33,11 @@
 \department{Astronomy and Astrophysics}
 \gradyear{2016}
 \author{Liam Dean Connor}
-\title{Probing the Time-Variable Long-Wavelength Sky}
-
+%\title{Probing the Time-Variable Long-Wavelength Sky}
+%\title{Probing the Long-Wavelength Sky at High Time Resolution}
+\title{CHIME and Probing the Origin of Fast Radio Bursts}
+%\title{CHIME and Long-Wavelength Time-Variable Astrophysics}
+%\title{Fast Radio Bursts, Pulsars, and the Canadian Hydrogen Intensity Mapping Experiment}
 % ----------------------------------------------------------------------------------------------------------------------------------------
 % COMMANDS AND DEFINITIONS
 % ----------------------------------------------------------------------------------------------------------------------------------------
@@ -62,11 +63,11 @@
 % This sets the page style and numbering for preliminary sections.
 \begin{preliminary}
 
-\cleardoublepage
-\phantomsection
-\addcontentsline{toc}{chapter}{Glossary}
-\glossarystyle{super}
-\printglossary[title='Glossary']
+% \cleardoublepage
+% \phantomsection
+% \addcontentsline{toc}{chapter}{Glossary}
+% \glossarystyle{super}
+% \printglossary[title='Glossary']
 
 % This generates the title page from the information given above.
 \maketitle
@@ -140,57 +141,57 @@ structure.
 % DEDICATION
 % ----------------------------------------------------------------------------------------------------------------------------------------
 
-\begin{dedication}
-\vspace*{\fill}
-\begin{center}
-{\em|}% To Pop and my infinitely supportive parents}
-\end{center}
-\vfill
-\end{dedication}
+% \begin{dedication}
+% \vspace*{\fill}
+% \begin{center}
+% {\em|}% To Pop and my infinitely supportive parents}
+% \end{center}
+% \vfill
+% \end{dedication}
 
-\newpage % Force separate pages for dedication and acknowledgements
+% \newpage % Force separate pages for dedication and acknowledgements
 
 
 % ----------------------------------------------------------------------------------------------------------------------------------------
 % ACKNOWLEDGEMENTS
 % ----------------------------------------------------------------------------------------------------------------------------------------
 
-% \begin{acknowledgements}
-%    The research presented in this thesis samples the work 
-%    I have done over the last five years, which has 
-%    ranged from what felt like mathematical musings to software development  
-%    to on-site hardware work. This is because both of my supervisors, 
-%    Ue-Li Pen and Keith Vanderlinde, possess end-to-end knowledge 
-%    and understanding that has at times left me awe-stricken; 
-%    needless to say this thesis would not have been possible without them. 
-%    A similarly insightful supervisory figure was Richard Shaw, 
-%    whose ease with signal processing, statistics, and computing 
-%    was greatly appreciated in my first couple years of graduate school. 
-%    On the CHIME team, I was lucky enough to work closely 
-%    with such world-class experimental cosmologists as Mark Halpern 
-%    and Gary Hinshaw. Tom Landecker was an irreplaceable source 
-%    of knowledge and wisdom during my many 
-%    visits to DRAO, acting as the token radio astronomer in a 
-%    large radio astronomy project. I also thank the members of my 
-%    thesis committee, including Mike Reid and Barth Netterfield. 
-%    To the four other remaining Ph.D. candidates in my year,
-%    Heidi, Lauren, Max, and Stephen, it's been a pleasure. I'll 
-%    never forget moving into the astro library with you guys 
-%    in order to sweat over quals. To my external friends, Malcolm,
-%    Geoff, NELLA, Tom, Riley, Pete, and Nick, I appreciate the tacit 
-%    support and your expertly feigned disinterest in the particulars 
-%    of my research. It allowed for much-needed compartmentalization 
-%    and enabled me to genuinely enjoy my mid-twenties in Toronto. 
-%    Layla, thank you for grounding me and expanding my world.
-%    Finally, I thank my family. Mom and dad, the goodness of your 
-%    parenting precluded me from 
-%    making a career in painting, poetry, or literature, since I 
-%    would have no right to claim myself a tortured artist. Pop, 
-%    your intellectual curiosity and sense of humour 
-%    at the age of (at the time of this writing) ninety one, 
-%    is truly inspiring. Alastair, Reegan, and Sophie, thank you 
-%    as well for the support over these last five years.
-% \end{acknowledgements}
+\begin{acknowledgements}
+   The research presented in this thesis samples the work 
+   I have done over the last five years, which has 
+   ranged from what felt like mathematical musings to software development  
+   to on-site hardware work. This is because both of my supervisors, 
+   Ue-Li Pen and Keith Vanderlinde, possess end-to-end knowledge 
+   and understanding that has at times left me awe-stricken; 
+   needless to say this thesis would not have been possible without them. 
+   A similarly insightful supervisory figure was Richard Shaw, 
+   whose ease with signal processing, statistics, and computing 
+   was greatly appreciated in my first couple years of graduate school. 
+   On the CHIME team, I was lucky enough to work closely 
+   with such world-class experimental cosmologists as Mark Halpern 
+   and Gary Hinshaw. Tom Landecker was an irreplaceable source 
+   of knowledge and wisdom during my many 
+   visits to DRAO, acting as the token radio astronomer in a 
+   large radio astronomy project. I also thank the members of my 
+   thesis committee, including Mike Reid and Barth Netterfield. 
+   To the four other remaining Ph.D. candidates in my year,
+   Heidi, Lauren, Max, and Stephen, it's been a pleasure. I'll 
+   never forget moving into the astro library with you guys 
+   in order to sweat over quals. To my external friends, Malcolm,
+   Geoff, NELLA, Tom, Riley, Pete, Alex, and Nick, I appreciate the tacit 
+   support and your expertly feigned disinterest in the particulars 
+   of my research. It allowed for much-needed compartmentalization 
+   and enabled me to genuinely enjoy my mid-twenties in Toronto. 
+   Layla, thank you for grounding me and expanding my worldview.
+   Finally, I thank my family. Mom and dad, the goodness of your 
+   parenting precluded me from 
+   making a career in painting, poetry, or literature, since I 
+   would have no right to claim myself a tortured artist. Pop, 
+   your intellectual curiosity and sense of humour 
+   at the age of (at the time of this writing) ninety one, 
+   is truly inspiring. Alastair, Reegan, and Sophie, thank you 
+   as well for the support over these last five years.
+\end{acknowledgements}
 
 % ----------------------------------------------------------------------------------------------------------------------------------------
 % TABLE OF CONTENTS

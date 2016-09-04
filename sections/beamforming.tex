@@ -584,8 +584,16 @@ interrupt the ongoing cosmology acquisition, we decided to
 build a preliminary FRB search. We also have as many as three 
 other telescopes onto which we can mount 
 CHIME feeds and observe in our band: the Algonquin Radio Observatory (ARO), 
-the John A. Galt 26\,m, and the Green Bank 140ft telescope. This would
+the John A. Galt 26\,m, and the Green Bank 140\,ft telescope. This would
 allow for the first ever VLBI detection of an FRB. 
+If the array consisted of just the DRAO-ARO baseline, 
+we would instantaneously get milli-arcsecond resolution in one dimension,
+but poor localization in the orthogonal direction. However, 
+this could be improved upon from the earth rotation during 
+the $\sim$30 seconds of dispersion delay. That said, 
+a VLBI array with three or more elements 
+would be ideal. 
+
 
 This is interesting for a few reasons. From a development 
 standpoint it allows us to understand better various stages of the 
@@ -625,7 +633,8 @@ has only been true of two published FRBs.
      Galactic center and the edge of the disk. On the other hand, 
      0.03" ($\sim$10$^7$ wavelengths) can localize the source well 
      within the Galaxy even at high redshifts. This is the 
-     resolution of the 3,074\,km DRAO-ARO baseline in our band.}  
+     resolution in one direction 
+     of the 3,074\,km DRAO-ARO baseline in our band.}
 \label{fig-m51}
 \end{center}
 \end{figure}
@@ -927,7 +936,7 @@ r_o &= \textrm{FoV} \times \left(\textrm{sensitivity}\right)^\alpha\\
 \end{align}
 where $\alpha$ is the FRB flux distribution's power-law index, which is 
 $3/2$ if FRBs are non-cosmological and Euclidean. If $\alpha < 1$, 
-as is expected in the cosmological FRB scenario, then 
+as might be expected in the cosmological FRB scenario, then 
 small telescopes are actually advantageous over large 
 single-pixel telescopes since survey speed decreases with telescope size
 once $\alpha-1$ is negative. 
@@ -938,7 +947,7 @@ roughly 10 times higher if $\alpha\approx 0.8$ (cosmological scenario)
 compared to the Euclidean case. This is because its relatively 
 low sensitivity per steradian requires there be large numbers 
 of very bright bursts, which one gets from a flat distribution.
-Using non-detection in $\sim$1.5 months of observing, we can 
+Using our non-detection in $\sim$1.5 months of observing, we can 
 estimate the values of $\alpha$ that are excluded 
 by calculating the Poissonian probability of seeing zero 
 given some expected value. As a simple model, assume
@@ -1013,7 +1022,7 @@ zero FRBs in 45 days of observing, assuming the
 from \citep{2016MNRAS.460.1054C}. The 
 left edge uses the lower-bound on the rate, which is why 
 seeing no events is quite likely, even when the 
-spectrum is quite flat.
+spectrum is relatively flat.
 
 \begin{figure}[!h]
 \begin{center}
@@ -1060,7 +1069,7 @@ a step which is vital to beamforming.
 The CHIME Pathfinder now has a stable beamforming back-end
 that runs in parallel with the full-$N^2$ cosmology acquisition.
 The back-end provides us with a tracking synthetic beam that 
-dumps baseband data to disk with 1024$times$391\,kHz channels 
+dumps baseband data to disk with 1024$\times$391\,kHz channels 
 after sampling at 1.25\,ns. We have outlined the commissioning of this 
 back-end, including the first coherent pulsar observations on CHIME.
 
