@@ -16,9 +16,13 @@
 In this chapter we present results from full-polarization  
 single-pulse observations of pulsar B0329+54. 
 We have over $10^4$ pulses 
-collected with the Algonquin Radio Observatory 46\,m telescope
+collected with the Algonquin Radio Observatory (ARO) 46\,m telescope
 with 2.56\,$\mu$s time resolution and 390\,kHz 
-frequency bins. 
+frequency bins. ARO has been fitted with a CHIME 
+receiver, as well as an analog and computing back-end built from 
+CHIME hardware. This back-end allows us to write to disk 
+full-resolution baseband voltages, which can be processed 
+offline. 
 We find microstructure to be a generic broad-band property of 
 individual pulses at 400-800\,MHz. 
 We also analyze B0329+54's quasi-periodic structure
@@ -141,7 +145,7 @@ can be informed by observations microstructure and
 its polarization. Since the sub-pulses that make 
 up individual pulses can be further broken down into 
 microstructures, those microbursts should show phenomena 
-predicted by thoery. The consequences of 
+predicted by theory. The consequences of 
 an incoherent sum of charged bunches 
 emitting coherent curvature radiation can be found 
 in \citet{1990A&A...234..269G} and summarized 
@@ -206,7 +210,8 @@ $\sim$27 pc cm$^{-3}$, and we have found it is sufficient to do ``by-channel"
 dedispersion. This means stepping through each frequency 
 of the channelized voltage data, inverse Fourier transforming 
 that frequency's time series, and dedispersing that up-channelized 
-chunk. The resultant DM-smearing in the case of 
+chunk. The leftover DM-smearing after this quasi-coherent 
+dedispersion in the case of 
 B0329+54 is negligible. 
 
 The two dedispersed voltage time-streams are then correlated, 
@@ -223,7 +228,8 @@ D = \begin{pmatrix}
 \end{pmatrix}.
 \end{equation}
 \\
-\noindent By rearranging these, the Stokes parameters can 
+\noindent Here $^*$ represents a scalar complex conjugation. 
+By rearranging these intensities, the Stokes parameters can 
 be obtained as follows,
 \\
 \begin{equation}
@@ -247,7 +253,7 @@ we must remove two effects. The first is the
 sinusoidal phase in frequency introduced by cable delays. 
 This comes from that fact that the two polarizations signals, 
 $X_0$ and $X_1$, end up with slightly different instrumental 
-phases due to things like disparate cable lengths. When 
+phases due to, e.g., disparate cable lengths. When 
 the signals are correlated, a constant phase offset (time lag) 
 becomes a sinusoidal oscillation in frequency. 
 Written in terms of the Stokes parameters
@@ -297,8 +303,6 @@ calibrated template in the literature. We found
 small deviations from the known template of 
 less than $\sim$5$\%$ in slope.
 
-corr-vdif burst-search network
-
 \section{Microstructure}
 
 The polarization and 
@@ -306,7 +310,7 @@ total intensity of B0329+54 vary on a range of scales.
 Though the polarization in its folded profile is less than 
 10$\%$ for both linear and circular, the 
 mode and fraction from individual pulses 
-jumps around. The pol-fraction for single pulses 
+jump around. The pol-fraction for single pulses 
 can surpass $70\%$. The total intensity is modulated 
 at a number of different locations.
 In the ISM, scintillation causes the pulsar's brightness to fluctuate 
@@ -517,7 +521,7 @@ polarization consequences of a model
 in which the incoherent superposition of a large 
 collection of sub-nanosecond pulses produced 
 by the curvature mechanism resulted in pulsar radio emission.
-They found the charged bunches in vacua scenario predicts
+They found the charged bunches in vacuum scenario predicts
 sign-changing circular polarization. Since 
 \citet{2015ApJ...806..236M} do not see 
 handedness switching in individual microbursts, they conclude 
@@ -577,7 +581,7 @@ if microstructure is caused by temporal
 variation in the magnetosphere. If each pulse is not a result 
 of an individual collection of coherently emitting 
 charged bunches, then why would frequency behaviour 
-changed so drastically on such a short timescale?
+change so drastically on such a short timescale?
 
 \begin{figure}[!h]
 \vspace{-0.5cm}
